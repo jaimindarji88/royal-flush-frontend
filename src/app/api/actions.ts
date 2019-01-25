@@ -1,5 +1,3 @@
-import { Dispatch } from "redux";
-
 export const CREATE_HISTOGRAM = "CREATE_HISTOGRAM";
 export const GET_ODDS = "GET_ODDS";
 
@@ -22,8 +20,4 @@ export function getOdds(cards: string[], board: string) {
     cards,
     type: GET_ODDS
   };
-}
-
-function fetchHistogram(hand: string, others: string[], board: string) {
-  return (dispatch: Dispatch<CREATE_HISTOGRAM>) => {};
 }

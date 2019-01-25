@@ -1,5 +1,4 @@
-import * as firebase from 'firebase';
-
+import * as firebase from "firebase";
 interface IFirebaseConfig {
   apiKey: string;
   authDomain: string;
@@ -15,18 +14,15 @@ const config: IFirebaseConfig = {
   databaseURL: "https://poker-hands-123.firebaseio.com",
   messagingSenderId: "501304823469",
   projectId: "poker-hands-123",
-  storageBucket: "",
+  storageBucket: ""
 };
-
 
 firebase.initializeApp(config);
 
 export const uiConfig = {
-  signInFlow: 'popup',
-  signInOptions: [
-    firebase.auth.GoogleAuthProvider.PROVIDER_ID
-  ],
-  signInSuccessUrl: '/signedIn',
+  signInFlow: "popup",
+  signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
+  signInSuccessUrl: "/signedIn"
 };
 
 export default firebase;
