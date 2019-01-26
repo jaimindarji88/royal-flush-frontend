@@ -1,11 +1,12 @@
 import { Navbar, NavbarEnd, NavbarItem, NavbarStart } from "bloomer";
 import * as React from "react";
-import { withFirebase } from "react-redux-firebase";
 
 import FirebaseSignIn from "../../modules/firebase/component";
 
-function Header(props: any) {
+export default function Header(props: { name: string }) {
   function getAuthButton(): JSX.Element {
+    const { name } = props;
+
     if (name) {
       return <button className="button is-primary">Sign Out</button>;
     }
@@ -26,5 +27,3 @@ function Header(props: any) {
     </Navbar>
   );
 }
-
-export default withFirebase(Header);
