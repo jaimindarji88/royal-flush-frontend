@@ -1,12 +1,12 @@
-import { Navbar, NavbarEnd, NavbarItem, NavbarStart } from "bloomer";
-import * as React from "react";
+import { Navbar, NavbarEnd, NavbarItem, NavbarStart } from 'bloomer';
+import * as React from 'react';
 
-import FirebaseSignIn from "../../modules/firebase/component";
+import FirebaseSignIn from '../../modules/firebase/component';
 
-export default function Header(props: { name: string }) {
+export default function Header(props: { name: string | null }) {
+  const { name } = props;
+
   function getAuthButton(): JSX.Element {
-    const { name } = props;
-
     if (name) {
       return <button className="button is-primary">Sign Out</button>;
     }
@@ -14,7 +14,7 @@ export default function Header(props: { name: string }) {
   }
 
   return (
-    <Navbar style={{ backgroundColor: "lightgrey" }}>
+    <Navbar style={{ backgroundColor: 'lightgrey' }}>
       <NavbarStart>
         <NavbarItem>Poker</NavbarItem>
         <NavbarItem>

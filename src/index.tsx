@@ -1,28 +1,19 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-import { Provider } from "react-redux";
-import { ReactReduxFirebaseProvider } from "react-redux-firebase";
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 
-import App from "./app";
-import firebase from "./app/modules/firebase/config";
-import store from "./app/store/configure";
+import App from './app';
+// import firebase from './app/modules/firebase/config';
+import store from './app/store/configure';
 
-import registerServiceWorker from "./registerServiceWorker";
+import registerServiceWorker from './registerServiceWorker';
 
-import "bulma/css/bulma.css";
-
-const rrfProps = {
-  config: {},
-  dispatch: store.dispatch,
-  firebase
-};
+import 'bulma/css/bulma.css';
 
 ReactDOM.render(
   <Provider store={store}>
-    <ReactReduxFirebaseProvider {...rrfProps}>
-      <App />
-    </ReactReduxFirebaseProvider>
+    <App />
   </Provider>,
-  document.getElementById("root")
+  document.getElementById('root')
 );
 registerServiceWorker();
