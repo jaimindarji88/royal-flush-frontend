@@ -1,12 +1,26 @@
-import { AUTH, AuthState } from './types';
+import { AUTH } from './types';
 
-export function authReducer(state: AuthState = {}, action: any) {
-  switch (action.type) {
-    case AUTH.LOGIN: {
-      return action.payload;
-    }
-    default: {
-      return state;
-    }
-  }
+export interface FirebaseState {
+  user: null | firebase.UserInfo;
 }
+
+export const INITIAL_STATE: FirebaseState = {
+  user: null
+};
+
+export default (state: FirebaseState = INITIAL_STATE, action: any) => {
+  switch (action.type) {
+    case AUTH.FETCH:
+      return {
+        ...state,
+        user: action.payload
+      };
+    case AUTH.SIGN_OUT:
+      return {
+        ...state,
+        user: null
+      };
+    default:
+      return state;
+  }
+};

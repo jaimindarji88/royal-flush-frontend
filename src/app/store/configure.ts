@@ -1,12 +1,18 @@
-import { createStore } from "redux";
-import { composeWithDevTools } from "redux-devtools-extension";
+import { applyMiddleware, compose, createStore, Store } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import thunk from 'redux-thunk';
 
-import { Dispatch } from "react";
-import reducer from "./reducers";
+import rootReducer, { AppState, combineInitialState } from './reducers';
 
-export interface IConnectedProps<S> {
-  dispatch: Dispatch<S>;
-  firebase: firebase.app.App;
-}
+const middleWare = compose(
+  applyMiddleware(thunk),
+  composeWithDevTools()
+);
 
-export default createStore(reducer, {}, composeWithDevTools());
+const store: Store<AppState> = createStore(
+  rootReducer,
+  combineInitialState as any,
+  middleWare
+);
+
+export default store;

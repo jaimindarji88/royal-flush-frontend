@@ -1,29 +1,58 @@
 import { Navbar, NavbarEnd, NavbarItem, NavbarStart } from 'bloomer';
 import * as React from 'react';
+import { connect } from 'react-redux';
 
 import FirebaseSignIn from '../../modules/firebase/component';
+import { AppState } from '../../store/reducers';
 
-export default function Header(props: { name: string | null }) {
-  const { name } = props;
+import './header.css';
 
-  function getAuthButton(): JSX.Element {
-    if (name) {
-      return <button className="button is-primary">Sign Out</button>;
+interface Props {
+  user: firebase.User;
+  handleSignOut: () => void;
+}
+
+export class Header extends React.Component<Props> {
+  constructor(props: Props) {
+    super(props);
+  }
+
+  public render() {
+    const { user } = this.props;
+    let name = null;
+    if (user) {
+      name = user.displayName;
+    }
+
+    return (
+      <div className="header">
+        <Navbar style={{ backgroundColor: 'lightgrey' }}>
+          <NavbarStart>
+            <NavbarItem>Poker</NavbarItem>
+            <NavbarItem>
+              <b>{name}</b>
+            </NavbarItem>
+          </NavbarStart>
+          <NavbarEnd>
+            <NavbarItem>{this.getAuthButton()}</NavbarItem>
+          </NavbarEnd>
+        </Navbar>
+      </div>
+    );
+  }
+  private getAuthButton(): JSX.Element {
+    const { user, handleSignOut } = this.props;
+    if (user) {
+      return (
+        <button onClick={handleSignOut} className="sign-out button is-primary">
+          Sign Out
+        </button>
+      );
     }
     return <FirebaseSignIn />;
   }
-
-  return (
-    <Navbar style={{ backgroundColor: 'lightgrey' }}>
-      <NavbarStart>
-        <NavbarItem>Poker</NavbarItem>
-        <NavbarItem>
-          <b>{name}</b>
-        </NavbarItem>
-      </NavbarStart>
-      <NavbarEnd>
-        <NavbarItem>{getAuthButton()}</NavbarItem>
-      </NavbarEnd>
-    </Navbar>
-  );
 }
+
+export default connect((state: AppState) => ({
+  user: state.firebase.user
+}))(Header);

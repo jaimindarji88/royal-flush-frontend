@@ -1,10 +1,22 @@
-import { firebaseReducer } from "react-redux-firebase";
-import { combineReducers } from "redux";
+import { combineReducers, DeepPartial } from 'redux';
 
-export interface IAppState {
-  firebase: firebase.app.App;
+import { INITIAL_STATE as firebaseInitial } from '../modules/firebase';
+import firebase, { FirebaseState } from '../modules/firebase/reducers';
+
+import board, { INITIAL_STATE as boardInitial } from '../modules/board';
+import { BoardState } from '../modules/board/types';
+
+export interface AppState {
+  firebase: FirebaseState;
+  board: BoardState;
 }
 
-export default combineReducers<IAppState>({
-  firebase: firebaseReducer
+export const combineInitialState: DeepPartial<AppState> = {
+  board: boardInitial,
+  firebase: firebaseInitial
+};
+
+export default combineReducers<any>({
+  board,
+  firebase
 });
