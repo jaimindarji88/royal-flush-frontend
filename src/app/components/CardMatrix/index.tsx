@@ -6,13 +6,15 @@ import * as UUID from 'uuid';
 import { cards } from '../../constants/cards';
 import CardButton from '../CardButton';
 
-export default class Matrix extends React.Component {
+export default class Matrix extends React.Component<{}, { selected?: string }> {
   constructor(props: any) {
     super(props);
 
     this.state = {
-      selected: null
+      selected: undefined
     };
+
+    this.handleClick = this.handleClick.bind(this);
   }
 
   public render() {
@@ -26,6 +28,7 @@ export default class Matrix extends React.Component {
                   key={card}
                   card_text={card}
                   handleClick={this.handleClick}
+                  selected={this.state.selected === card ? true : false}
                 />
               ))}
             </Container>

@@ -9,8 +9,9 @@ export const fetchUser = () => (dispatch: Dispatch) => {
   auth.onAuthStateChanged(user => {
     if (user) {
       dispatch({
+        nice: console.log('memeesss'),
         payload: user,
-        type: AUTH.FETCH
+        type: AUTH.FETCH_USER
       });
     }
   });

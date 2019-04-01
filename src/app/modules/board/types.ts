@@ -14,5 +14,5 @@ export interface BoardState {
   board: string | null;
   others: Player[];
   player_count: number;
-  user: Player;
+  player: Player;
 }

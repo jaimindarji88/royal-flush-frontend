@@ -2,7 +2,7 @@ export enum AUTH {
   LOGIN = 'LOGIN',
   LOGOUT = 'LOGOUT',
   ERROR = 'ERROR',
-  FETCH = 'FETCH',
+  FETCH_USER = 'FETCH_USER',
   SIGN_OUT = 'SIGN_OUT'
 }
 

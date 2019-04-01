@@ -10,7 +10,7 @@ export const INITIAL_STATE: FirebaseState = {
 
 export default (state: FirebaseState = INITIAL_STATE, action: any) => {
   switch (action.type) {
-    case AUTH.FETCH:
+    case AUTH.FETCH_USER:
       return {
         ...state,
         user: action.payload

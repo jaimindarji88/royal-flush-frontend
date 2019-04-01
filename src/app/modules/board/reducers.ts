@@ -3,20 +3,20 @@ import { BOARD, BoardState } from './types';
 export const INITIAL_STATE: BoardState = {
   board: null,
   others: [],
-  player_count: 2,
-  user: {
+  player: {
     cards: [],
     stats: {}
-  }
+  },
+  player_count: 2
 };
 
 export default (state: BoardState = INITIAL_STATE, action: any) => {
-  switch (action) {
+  switch (action.type) {
     case BOARD.USER_CARDS:
       return {
         ...state,
         user: {
-          ...state.user,
+          ...state.player,
           cards: action.payload
         }
       };

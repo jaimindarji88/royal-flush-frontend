@@ -10,7 +10,7 @@ export default function(props: {}) {
         <b>Players</b>
         <br />
         {_.range(2, 9).map(val => (
-          <div>val</div>
+          <div>{val}</div>
         ))}
       </div>
     </GridLayout>

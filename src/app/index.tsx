@@ -15,9 +15,14 @@ interface DispatchProps {
 type Props = DispatchProps;
 
 class App extends React.Component<Props, any> {
-  public render() {
-    const { fetchUser, signOut } = this.props;
+  public componentDidMount() {
+    const { fetchUser } = this.props;
+    console.log('lets do ti');
     fetchUser();
+  }
+
+  public render() {
+    const { signOut } = this.props;
 
     return (
       <div className="App">
