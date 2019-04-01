@@ -19,7 +19,7 @@ export class Header extends React.Component<Props> {
 
   public render() {
     const { user } = this.props;
-    let name = null;
+    let name;
     if (user) {
       name = user.displayName;
     }

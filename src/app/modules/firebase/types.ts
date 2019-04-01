@@ -11,7 +11,7 @@ export interface AuthMap {
 }
 
 export interface FirebaseState {
-  user: null | firebase.User;
+  user?: firebase.User;
 }
 
 export type AuthState = AuthMap;

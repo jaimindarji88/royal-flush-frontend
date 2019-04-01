@@ -1,11 +1,7 @@
-import { AUTH } from './types';
-
-export interface FirebaseState {
-  user: null | firebase.UserInfo;
-}
+import { AUTH, FirebaseState } from './types';
 
 export const INITIAL_STATE: FirebaseState = {
-  user: null
+  user: undefined
 };
 
 export default (state: FirebaseState = INITIAL_STATE, action: any) => {
@@ -18,7 +14,7 @@ export default (state: FirebaseState = INITIAL_STATE, action: any) => {
     case AUTH.SIGN_OUT:
       return {
         ...state,
-        user: null
+        user: undefined
       };
     default:
       return state;

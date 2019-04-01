@@ -11,7 +11,7 @@ export enum BOARD {
 }
 
 export interface BoardState {
-  board: string | null;
+  board?: string;
   others: Player[];
   player_count: number;
   player: Player;

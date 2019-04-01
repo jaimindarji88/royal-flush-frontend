@@ -1,7 +1,7 @@
 import { BOARD, BoardState } from './types';
 
 export const INITIAL_STATE: BoardState = {
-  board: null,
+  board: undefined,
   others: [],
   player: {
     cards: [],

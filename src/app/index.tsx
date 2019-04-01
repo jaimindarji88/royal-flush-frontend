@@ -34,7 +34,7 @@ class App extends React.Component<Props, any> {
 }
 
 export default connect(
-  null,
+  undefined,
   {
     fetchUser: firebaseActions.fetchUser,
     signOut: firebaseActions.signOut
