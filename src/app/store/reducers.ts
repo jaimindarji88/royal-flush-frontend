@@ -1,7 +1,9 @@
 import { combineReducers, DeepPartial } from 'redux';
 
-import { INITIAL_STATE as firebaseInitial } from '../modules/firebase';
-import firebase, { FirebaseState } from '../modules/firebase/reducers';
+import firebase, {
+  INITIAL_STATE as firebaseInitial
+} from '../modules/firebase';
+import { FirebaseState } from '../modules/firebase/types';
 
 import board, { INITIAL_STATE as boardInitial } from '../modules/board';
 import { BoardState } from '../modules/board/types';

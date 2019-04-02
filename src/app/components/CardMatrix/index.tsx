@@ -1,12 +1,24 @@
 import { Container } from 'bloomer';
 import * as _ from 'lodash';
 import * as React from 'react';
+import { connect } from 'react-redux';
 import * as UUID from 'uuid';
 
 import { cards } from '../../constants/cards';
+import { boardActions } from '../../modules/board';
 import CardButton from '../CardButton';
 
-export default class Matrix extends React.Component<{}, { selected?: string }> {
+interface DispatchProps {
+  addPlayerCards: typeof boardActions['addPlayerCards'];
+}
+
+interface State {
+  selected?: string;
+}
+
+type Props = DispatchProps;
+
+class Matrix extends React.Component<Props, State> {
   constructor(props: any) {
     super(props);
 
@@ -17,9 +29,16 @@ export default class Matrix extends React.Component<{}, { selected?: string }> {
     this.handleClick = this.handleClick.bind(this);
   }
 
+  public componentDidUpdate() {
+    const { selected } = this.state;
+    if (selected) {
+      this.props.addPlayerCards(selected);
+    }
+  }
+
   public render() {
     return (
-      <div data-grid={{ x: 0, y: 0, w: 4, h: 3 }}>
+      <div className="card-matrix">
         {cards.map((row: string[]) => {
           return (
             <Container style={{ margin: 0 }} key={UUID.v4()}>
@@ -46,3 +65,10 @@ export default class Matrix extends React.Component<{}, { selected?: string }> {
     });
   }
 }
+
+export default connect(
+  undefined,
+  {
+    addPlayerCards: boardActions.addPlayerCards
+  }
+)(Matrix);
