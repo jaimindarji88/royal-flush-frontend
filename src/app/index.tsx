@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 // import CardContainer from "./components/CardContainer";
 
-import CardMatrix from './components/CardMatrix';
+import Wrapper from './components';
 import Header from './components/Header';
 import { firebaseActions } from './modules/firebase';
 
@@ -17,7 +17,7 @@ type Props = DispatchProps;
 class App extends React.Component<Props, any> {
   public componentDidMount() {
     const { fetchUser } = this.props;
-    console.log('lets do ti');
+
     fetchUser();
   }
 
@@ -27,7 +27,7 @@ class App extends React.Component<Props, any> {
     return (
       <div className="App">
         <Header handleSignOut={signOut} />
-        <CardMatrix />
+        <Wrapper />
       </div>
     );
   }

@@ -12,7 +12,7 @@ export const INITIAL_STATE: BoardState = {
 
 export default (state: BoardState = INITIAL_STATE, action: any) => {
   switch (action.type) {
-    case BOARD.USER_CARDS:
+    case BOARD.ADD_PLAYER_CARDS:
       return {
         ...state,
         user: {
@@ -25,12 +25,12 @@ export default (state: BoardState = INITIAL_STATE, action: any) => {
         ...state,
         player_count: action.payload
       };
-    case BOARD.BOARD:
+    case BOARD.ADD_BOARD:
       return {
         ...state,
         board: action.payload
       };
-    case BOARD.OTHER_CARDS:
+    case BOARD.ADD_OTHER_CARDS:
       return {
         ...state,
         others: [...state.others, action.payload]
