@@ -1,20 +1,34 @@
-import wretch from 'wretch';
-
 import { routes } from './constants';
 
 async function postJSON(url: string, body: any) {
-  return wretch(url)
-    .body(body)
-    .post()
-    .json(JSON => JSON);
+  return fetch(url, {
+    body: JSON.stringify(body),
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'POST'
+  }).then(data => data.json());
 }
 
-async function histogram(hand: string, others: string[], board: string) {
-  const body = {
-    board,
+interface Body {
+  hand: string;
+  others: string[];
+  board?: string;
+}
+
+export async function histogram(
+  hand: string,
+  others: string[] = [],
+  board: string = ''
+) {
+  const body: Body = {
     hand,
     others
   };
+
+  if (board) {
+    body.board = board;
+  }
 
   return postJSON(routes.histogram(), body);
 }

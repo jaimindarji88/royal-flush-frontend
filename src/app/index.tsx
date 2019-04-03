@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-// import CardContainer from "./components/CardContainer";
-
+import { histogram } from './api/requests';
 import Wrapper from './components';
 import Header from './components/Header';
 import { firebaseActions } from './modules/firebase';
@@ -15,10 +14,13 @@ interface DispatchProps {
 type Props = DispatchProps;
 
 class App extends React.Component<Props, any> {
-  public componentDidMount() {
+  public async componentDidMount() {
     const { fetchUser } = this.props;
 
     fetchUser();
+
+    const a = await histogram('AsAc', ['KsKc']);
+    console.log(a);
   }
 
   public render() {
