@@ -19,7 +19,7 @@ interface State {
 type Props = DispatchProps;
 
 class Matrix extends React.Component<Props, State> {
-  constructor(props: any) {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
@@ -47,7 +47,7 @@ class Matrix extends React.Component<Props, State> {
                   key={card}
                   card_text={card}
                   handleClick={this.handleClick}
-                  selected={this.state.selected === card ? true : false}
+                  selected={this.state.selected === card}
                 />
               ))}
             </Container>
