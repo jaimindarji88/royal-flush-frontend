@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-// import { histogram } from './api/requests';
 import Wrapper from './components';
 import Header from './components/Header';
 import { firebaseActions } from './modules/firebase';
