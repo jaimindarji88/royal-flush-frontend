@@ -21,10 +21,6 @@ interface StateProps {
   game: GameState;
 }
 
-// interface State {
-//   histogram: IHistogram[]
-// }
-
 type Props = DispatchProps & StateProps;
 
 class PokerHistogram extends React.Component<Props> {
@@ -46,7 +42,10 @@ class PokerHistogram extends React.Component<Props> {
           data={histogram.map(d => ({
             ...d,
             label: d.x.toString(),
-            style: { fontSize: 10 },
+            style: {
+              fontSize: 10,
+              display: d.x === 0 ? 'none' : 'inherit'
+            },
             xOffset: 5
           }))}
           labelAnchorX="text-after-edge"
