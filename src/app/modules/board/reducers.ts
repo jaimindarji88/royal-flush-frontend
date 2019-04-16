@@ -1,39 +1,46 @@
-import { BOARD, BoardState } from './types';
+import { histogramKeys, titleize } from '../../constants';
+import { GAME, GameState } from './types';
 
-export const INITIAL_STATE: BoardState = {
-  board: undefined,
+export const INITIAL_STATE: GameState = {
+  board: [],
   others: [],
   player: {
     cards: [],
     stats: {}
   },
-  player_count: 2
+  player_count: 2,
+  histogram: histogramKeys.map(hand => ({ x: 0, y: titleize(hand) }))
 };
 
-export default (state: BoardState = INITIAL_STATE, action: any) => {
+export default (state: GameState = INITIAL_STATE, action: any) => {
   switch (action.type) {
-    case BOARD.ADD_PLAYER_CARDS:
+    case GAME.UPDATE_PLAYER_CARDS:
       return {
         ...state,
-        user: {
+        player: {
           ...state.player,
           cards: action.payload
         }
       };
-    case BOARD.NUMBER_OF_PLAYERS:
+    case GAME.NUMBER_OF_PLAYERS:
       return {
         ...state,
         player_count: action.payload
       };
-    case BOARD.ADD_BOARD:
+    case GAME.ADD_BOARD:
       return {
         ...state,
-        board: action.payload
+        game: action.payload
       };
-    case BOARD.ADD_OTHER_CARDS:
+    case GAME.ADD_OTHER_CARDS:
       return {
         ...state,
         others: [...state.others, action.payload]
+      };
+    case GAME.UPDATE_HISTOGRAM:
+      return {
+        ...state,
+        histogram: action.payload
       };
     default:
       return state;

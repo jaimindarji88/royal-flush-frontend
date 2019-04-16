@@ -3,6 +3,7 @@ import * as React from 'react';
 import * as GridLayout from 'react-grid-layout';
 
 import CardMatrix from './CardMatrix';
+import PokerHistogram from './Histogram';
 import Players from './Players';
 
 export default function(props: {}) {
@@ -17,8 +18,8 @@ export default function(props: {}) {
       <div key="players" data-grid={{ x: 5, y: 0, w: 1, h: 5 }}>
         <Players />
       </div>
-      <div key="other" data-grid={{ x: 6, y: 0, w: 1, h: 2 }}>
-        c
+      <div key="histogram" data-grid={{ x: 6, y: 0, w: 5, h: 10 }}>
+        <PokerHistogram />
       </div>
     </GridLayout>
   );

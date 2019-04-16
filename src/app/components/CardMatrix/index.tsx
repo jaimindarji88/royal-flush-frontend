@@ -4,7 +4,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import * as UUID from 'uuid';
 
-import { cards } from '../../constants/cards';
+import { cards } from '../../constants';
 import { boardActions } from '../../modules/board';
 import CardButton from '../CardButton';
 
@@ -31,6 +31,7 @@ class Matrix extends React.Component<Props, State> {
 
   public componentDidUpdate() {
     const { selected } = this.state;
+
     if (selected) {
       this.props.addPlayerCards(selected);
     }

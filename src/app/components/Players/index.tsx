@@ -59,7 +59,6 @@ class Players extends React.Component<Props, State> {
     const { value } = event.target as HTMLButtonElement;
 
     if (value) {
-      console.log(value);
       this.setState({
         selected: Number(value)
       });
