@@ -1,3 +1,4 @@
+/* prettier-ignore */
 export const cards = [
   ['AA', 'AKs' , 'AQs', 'AJs', 'ATs', 'A9s', 'A8s', 'A7s', 'A6s', 'A5s', 'A4s', 'A3s', 'A2s'],
   ['AKo', 'KK' , 'KQs', 'KJs', 'KTs', 'K9s', 'K8s', 'K7s', 'K6s', 'K5s', 'K4s', 'K3s', 'K2s'],
@@ -14,3 +15,22 @@ export const cards = [
   ['A2o', 'K2o', 'Q2o', 'J2o', 'T2o', '92o', '82o', '72o', '62o', '52o', '42o', '32o', '22 '],
 ];
 
+export const histogramKeys = [
+  'high_card',
+  'pair',
+  'two_pair',
+  'set',
+  'straight',
+  'flush',
+  'full_house',
+  'quads',
+  'straight_flush',
+  'royal_flush'
+];
+
+export const titleize = (hand: string) => {
+  return hand
+    .toLowerCase()
+    .replace(/(?:^|\s|-)\S/g, x => x.toUpperCase())
+    .replace(/_/g, ' ');
+};

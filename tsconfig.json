@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "paths": { "*": ["types/*"] },
     "baseUrl": ".",
     "outDir": "build/dist",
     "module": "esnext",
@@ -17,7 +18,8 @@
     "importHelpers": true,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "typeRoots": ["./node_modules/@types", "./typings"]
   },
   "exclude": [
     "node_modules",
@@ -26,6 +28,7 @@
     "acceptance-tests",
     "webpack",
     "jest",
-    "src/setupTests.ts"
+    "src/setupTests.ts",
+    "config"
   ]
 }

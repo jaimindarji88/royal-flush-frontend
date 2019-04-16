@@ -12,6 +12,8 @@
       "options": ["spaces", 2]
     },
     "no-console": false,
-    "interface-name": false
+    "interface-name": false,
+    "no-var-requires": false,
+    "object-literal-sort-keys": false
   }
 }

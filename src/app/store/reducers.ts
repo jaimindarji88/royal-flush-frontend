@@ -5,20 +5,20 @@ import firebase, {
 } from '../modules/firebase';
 import { FirebaseState } from '../modules/firebase/types';
 
-import board, { INITIAL_STATE as boardInitial } from '../modules/board';
-import { BoardState } from '../modules/board/types';
+import game, { INITIAL_STATE as gameInitial } from '../modules/board';
+import { GameState } from '../modules/board/types';
 
 export interface AppState {
   firebase: FirebaseState;
-  board: BoardState;
+  game: GameState;
 }
 
 export const combineInitialState: DeepPartial<AppState> = {
-  board: boardInitial,
+  game: gameInitial,
   firebase: firebaseInitial
 };
 
 export default combineReducers<any>({
-  board,
+  game,
   firebase
 });
