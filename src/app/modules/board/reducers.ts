@@ -5,11 +5,11 @@ export const INITIAL_STATE: GameState = {
   board: [],
   others: [],
   player: {
-    cards: [],
-    stats: {}
+    cards: []
   },
   player_count: 2,
-  histogram: histogramKeys.map(hand => ({ x: 0, y: titleize(hand) }))
+  histogram: histogramKeys.map(hand => ({ x: 0, y: titleize(hand) })),
+  odds: []
 };
 
 export default (state: GameState = INITIAL_STATE, action: any) => {
@@ -41,6 +41,11 @@ export default (state: GameState = INITIAL_STATE, action: any) => {
       return {
         ...state,
         histogram: action.payload
+      };
+    case GAME.UPDATE_ODDS:
+      return {
+        ...state,
+        odds: action.payload
       };
     default:
       return state;

@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 
+import { titleize } from '../constants';
 import { Card, Player } from '../modules/board/types';
 import { routes } from './constants';
 
@@ -13,14 +14,11 @@ async function postJSON(url: string, body: any) {
   }).then(data => data.json());
 }
 
-interface Body {
-  hand: string;
-  others?: string[];
-  board?: string;
-}
-
-const cardsToString = (cards: Card[]) => {
-  const suits = ['s', 'c', 'd', 'h'];
+export const cardsToString = (cards: Card[]) => {
+  // @ts-ignore
+  // needed to run seeded rng
+  _ = _.runInContext();
+  const suits = _.shuffle(['s', 'c', 'd', 'h']);
 
   const sameSuit = _.sample(suits) as string;
   let str = '';
@@ -28,8 +26,7 @@ const cardsToString = (cards: Card[]) => {
     if (card.suit === 'ss') {
       card.suit = sameSuit;
     } else if (card.suit === 'os') {
-      const s = _.sample(suits) as string;
-      _.remove(suits, f => f === s);
+      const s = suits.pop() as string;
       card.suit = s;
     }
     str += card.card + card.suit;
@@ -42,6 +39,12 @@ export async function getHistogram(
   others: Player[],
   board: Card[]
 ) {
+  interface Body {
+    hand: string;
+    others?: string[];
+    board?: string;
+  }
+
   const body: Body = {
     hand: cardsToString(hand)
   };
@@ -58,9 +61,47 @@ export async function getHistogram(
 
     return Object.keys(histogram).map(key => ({
       x: histogram[key],
-      y: key
+      y: titleize(key)
     }));
   } catch (e) {
     throw Error('Could not get to the server for histogram');
+  }
+}
+
+export async function getOdds(hands: Card[][], board: Card[]) {
+  const RANDOM = '.';
+
+  interface Body {
+    hands: string[];
+    board?: string;
+  }
+
+  const body: Body = {
+    hands: hands.map(hand => (hand.length ? cardsToString(hand) : RANDOM))
+  };
+
+  if (board.length) {
+    body.board = cardsToString(board);
+  }
+
+  interface Odd {
+    win: number;
+    tie: number;
+    hand: string;
+  }
+
+  try {
+    const { odds } = await postJSON(routes.odds(), body);
+    // return odds;
+    return odds.map((odd: Odd) => {
+      const twoDecimals = (num: number) => Math.round(num * 100 * 100) / 100;
+      return {
+        hand: odd.hand,
+        win: twoDecimals(odd.win),
+        tie: twoDecimals(odd.tie)
+      };
+    });
+  } catch (e) {
+    throw Error('Could not complete request');
   }
 }

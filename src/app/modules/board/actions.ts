@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 
-import { getHistogram } from '../../api/requests';
+import { getHistogram, getOdds } from '../../api/requests';
 import { Card, GAME, Player } from './types';
 
 export const addPlayerCards = (cards: string) => (dispatch: Dispatch) => {
@@ -60,4 +60,18 @@ export const updateHistogram = (data: HistogramBody) => (
       type: GAME.UPDATE_HISTOGRAM
     })
   );
+};
+
+interface OddsBody {
+  hands: Card[][];
+  board: Card[];
+}
+
+export const updateOdds = (data: OddsBody) => (dispatch: Dispatch) => {
+  getOdds(data.hands, data.board).then(odds => {
+    dispatch({
+      payload: odds,
+      type: GAME.UPDATE_ODDS
+    });
+  });
 };

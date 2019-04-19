@@ -5,6 +5,7 @@ import * as GridLayout from 'react-grid-layout';
 import CardMatrix from './CardMatrix';
 import PokerHistogram from './Histogram';
 import Players from './Players';
+import PokerOdds from './PokerAdds';
 
 export default function(props: {}) {
   return (
@@ -20,6 +21,9 @@ export default function(props: {}) {
       </div>
       <div key="histogram" data-grid={{ x: 6, y: 0, w: 5, h: 10 }}>
         <PokerHistogram />
+      </div>
+      <div key="odds" data-grid={{ x: 0, y: 1, w: 3, h: 2 * 2 }}>
+        <PokerOdds />
       </div>
     </GridLayout>
   );

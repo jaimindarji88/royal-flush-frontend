@@ -13,6 +13,8 @@ interface State {
   selected: number;
 }
 
+const NUM_PLAYERS = 4;
+
 type Props = DispatchProps;
 
 class Players extends React.Component<Props, State> {
@@ -38,7 +40,7 @@ class Players extends React.Component<Props, State> {
       <div className="players">
         <b>Players</b>
         <br />
-        {_.range(2, 9).map(val => (
+        {_.range(2, NUM_PLAYERS + 1).map(val => (
           <Button
             key={uuid.v4()}
             value={val}
