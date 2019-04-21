@@ -5,7 +5,7 @@ import * as GridLayout from 'react-grid-layout';
 import CardMatrix from './CardMatrix';
 import PokerHistogram from './Histogram';
 import Players from './Players';
-import PokerOdds from './PokerAdds';
+import PokerOdds from './PokerOdds';
 
 export default function(props: {}) {
   return (

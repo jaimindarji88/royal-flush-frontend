@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 
 import { titleize } from '../constants';
-import { Card, Player } from '../modules/board/types';
+import { Card } from '../modules/board/types';
 import { routes } from './constants';
 
 async function postJSON(url: string, body: any) {
@@ -30,13 +30,14 @@ export const cardsToString = (cards: Card[]) => {
       card.suit = s;
     }
     str += card.card + card.suit;
+    card.str = str;
   });
   return str;
 };
 
 export async function getHistogram(
   hand: Card[],
-  others: Player[],
+  others: Card[][],
   board: Card[]
 ) {
   interface Body {
@@ -50,7 +51,7 @@ export async function getHistogram(
   };
 
   if (others.length) {
-    body.others = others.map(other => cardsToString(other.cards));
+    body.others = others.map(other => cardsToString(other));
   }
 
   if (board.length) {
@@ -77,7 +78,7 @@ export async function getOdds(hands: Card[][], board: Card[]) {
   }
 
   const body: Body = {
-    hands: hands.map(hand => (hand.length ? cardsToString(hand) : RANDOM))
+    hands: hands.map(hand => (_.isEmpty(hand) ? RANDOM : cardsToString(hand)))
   };
 
   if (board.length) {

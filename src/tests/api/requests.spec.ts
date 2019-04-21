@@ -1,6 +1,6 @@
 import * as seedrandom from 'seedrandom';
 
-import { cardsToString, getOdds } from '../../app/api/requests';
+import { cardsToString } from '../../app/api/requests';
 
 describe('should turn card object to a string', () => {
   beforeEach(() => {
@@ -8,7 +8,10 @@ describe('should turn card object to a string', () => {
   });
 
   test('same suited hand', () => {
-    const cards = [{ card: 'A', suit: 'ss' }, { card: 'K', suit: 'ss' }];
+    const cards = [
+      { card: 'A', suit: 'ss', str: '' },
+      { card: 'K', suit: 'ss', str: '' }
+    ];
 
     const cardString = cardsToString(cards);
 
@@ -16,7 +19,10 @@ describe('should turn card object to a string', () => {
   });
 
   test('off suit hand', () => {
-    const cards = [{ card: 'A', suit: 'os' }, { card: 'K', suit: 'os' }];
+    const cards = [
+      { card: 'A', suit: 'os', str: '' },
+      { card: 'K', suit: 'os', str: '' }
+    ];
 
     const cardString = cardsToString(cards);
 
@@ -25,24 +31,13 @@ describe('should turn card object to a string', () => {
 
   test('board', () => {
     const cards = [
-      { card: 'A', suit: 's' },
-      { card: 'A', suit: 'c' },
-      { card: 'A', suit: 'h' }
+      { card: 'A', suit: 's', str: 'As' },
+      { card: 'A', suit: 'c', str: 'Ac' },
+      { card: 'A', suit: 'h', str: 'Ah' }
     ];
 
     const cardString = cardsToString(cards);
 
     expect(cardString).toEqual('AsAcAh');
-  });
-});
-
-// needs to be reworked -> offline requests
-describe('should get the odds from api', () => {
-  test('get odds of a hand', async () => {
-    const hands = [[{ card: 'A', suit: 's' }, { card: 'A', suit: 'c' }], []];
-
-    const odds = await getOdds(hands, []);
-
-    console.log(odds);
   });
 });

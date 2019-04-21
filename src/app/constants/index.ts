@@ -28,6 +28,8 @@ export const histogramKeys = [
   'royal_flush'
 ];
 
+export const RANDOM = '.';
+
 export const titleize = (hand: string) => {
   return hand
     .toLowerCase()

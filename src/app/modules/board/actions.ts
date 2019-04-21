@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 
 import { getHistogram, getOdds } from '../../api/requests';
-import { Card, GAME, Player } from './types';
+import { Card, GAME } from './types';
 
 export const addPlayerCards = (cards: string) => (dispatch: Dispatch) => {
   let playerCards: Card[] = [];
@@ -12,22 +12,26 @@ export const addPlayerCards = (cards: string) => (dispatch: Dispatch) => {
     playerCards = [
       {
         card: cards[0],
-        suit: suit + 's'
+        suit: suit + 's',
+        str: ''
       },
       {
         card: cards[1],
-        suit: suit + 's'
+        suit: suit + 's',
+        str: ''
       }
     ];
   } else if (cards.length === 4) {
     playerCards = [
       {
         card: cards[0],
-        suit: cards[1]
+        suit: cards[1],
+        str: cards.substring(0, 2)
       },
       {
         card: cards[2],
-        suit: cards[3]
+        suit: cards[3],
+        str: cards.substring(2, 4)
       }
     ];
   }
@@ -47,7 +51,7 @@ export const editNumPlayers = (num: number) => (dispatch: Dispatch) => {
 
 interface HistogramBody {
   hand: Card[];
-  others: Player[];
+  others: Card[][];
   board: Card[];
 }
 

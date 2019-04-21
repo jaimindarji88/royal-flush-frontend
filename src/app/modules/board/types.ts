@@ -1,10 +1,7 @@
 export interface Card {
   card: string;
   suit: string;
-}
-
-export interface Player {
-  cards: Card[];
+  str: string;
 }
 
 export enum GAME {
@@ -29,9 +26,9 @@ export interface GameOdds {
 
 export interface GameState {
   board: Card[];
-  others: Player[];
+  others: Card[][];
   player_count: number;
-  player: Player;
+  player: Card[];
   histogram: IHistogram[];
   odds: GameOdds[];
 }
