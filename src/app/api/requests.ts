@@ -126,10 +126,8 @@ export async function getOdds(
       tie: 0,
       hand: _.isEmpty(hand) ? 'random' : cardsToString(hand)
     }));
-    const o = parseOdds(allOdds, oddsTemplate, numRandom);
 
-    console.log(o);
-    return o;
+    return parseOdds(allOdds, oddsTemplate, numRandom);
   } catch (e) {
     throw Error('Could not complete request');
   }
