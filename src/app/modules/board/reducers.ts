@@ -4,12 +4,10 @@ import { GAME, GameState } from './types';
 export const INITIAL_STATE: GameState = {
   board: [],
   others: [],
-  player: {
-    cards: [],
-    stats: {}
-  },
+  player: [],
   player_count: 2,
-  histogram: histogramKeys.map(hand => ({ x: 0, y: titleize(hand) }))
+  histogram: histogramKeys.map(hand => ({ x: 0, y: titleize(hand) })),
+  odds: []
 };
 
 export default (state: GameState = INITIAL_STATE, action: any) => {
@@ -17,10 +15,7 @@ export default (state: GameState = INITIAL_STATE, action: any) => {
     case GAME.UPDATE_PLAYER_CARDS:
       return {
         ...state,
-        player: {
-          ...state.player,
-          cards: action.payload
-        }
+        player: action.payload
       };
     case GAME.NUMBER_OF_PLAYERS:
       return {
@@ -41,6 +36,11 @@ export default (state: GameState = INITIAL_STATE, action: any) => {
       return {
         ...state,
         histogram: action.payload
+      };
+    case GAME.UPDATE_ODDS:
+      return {
+        ...state,
+        odds: action.payload
       };
     default:
       return state;

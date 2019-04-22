@@ -1,6 +1,7 @@
 import * as _ from 'lodash';
 
-import { Card, Player } from '../modules/board/types';
+import { titleize } from '../constants';
+import { Card } from '../modules/board/types';
 import { routes } from './constants';
 
 async function postJSON(url: string, body: any) {
@@ -13,14 +14,11 @@ async function postJSON(url: string, body: any) {
   }).then(data => data.json());
 }
 
-interface Body {
-  hand: string;
-  others?: string[];
-  board?: string;
-}
-
-const cardsToString = (cards: Card[]) => {
-  const suits = ['s', 'c', 'd', 'h'];
+export const cardsToString = (cards: Card[]) => {
+  // @ts-ignore
+  // needed to run seeded rng
+  _ = _.runInContext();
+  const suits = _.shuffle(['s', 'c', 'd', 'h']);
 
   const sameSuit = _.sample(suits) as string;
   let str = '';
@@ -28,26 +26,32 @@ const cardsToString = (cards: Card[]) => {
     if (card.suit === 'ss') {
       card.suit = sameSuit;
     } else if (card.suit === 'os') {
-      const s = _.sample(suits) as string;
-      _.remove(suits, f => f === s);
+      const s = suits.pop() as string;
       card.suit = s;
     }
     str += card.card + card.suit;
+    card.str = str;
   });
   return str;
 };
 
 export async function getHistogram(
   hand: Card[],
-  others: Player[],
+  others: Card[][],
   board: Card[]
 ) {
+  interface Body {
+    hand: string;
+    others?: string[];
+    board?: string;
+  }
+
   const body: Body = {
     hand: cardsToString(hand)
   };
 
   if (others.length) {
-    body.others = others.map(other => cardsToString(other.cards));
+    body.others = others.map(other => cardsToString(other));
   }
 
   if (board.length) {
@@ -58,9 +62,112 @@ export async function getHistogram(
 
     return Object.keys(histogram).map(key => ({
       x: histogram[key],
-      y: key
+      y: titleize(key)
     }));
   } catch (e) {
     throw Error('Could not get to the server for histogram');
   }
 }
+
+interface IOdd {
+  win: number;
+  tie: number;
+  hand: string;
+}
+const twoDecimals = (num: number) => Math.round(num * 100 * 100) / 100;
+
+export async function getOdds(
+  hands: Card[][],
+  board: Card[],
+  numRequests: number = 5
+) {
+  const RANDOM = '.';
+
+  interface Body {
+    hands: string[];
+    board?: string;
+  }
+
+  const body: Body = {
+    hands: hands.map(hand => (_.isEmpty(hand) ? RANDOM : cardsToString(hand)))
+  };
+
+  const numRandom = hands.filter(_.isEmpty).length;
+  console.log(numRandom);
+
+  if (board.length) {
+    body.board = cardsToString(board);
+  }
+
+  try {
+    if (numRandom === 1) {
+      const { odds } = await postJSON(routes.odds('10'), body);
+
+      return odds.map((odd: IOdd) => {
+        return {
+          hand: odd.hand,
+          win: twoDecimals(odd.win),
+          tie: twoDecimals(odd.tie)
+        };
+      });
+    }
+
+    // nit api goes very slowly for > 2 random hands
+    // so we're doing many requests with low number of iterations
+    // in parallel
+    const requests = [];
+    for (let i = 0; i < numRequests; i++) {
+      requests.push(postJSON(routes.odds('10'), body));
+    }
+
+    const allOdds = await Promise.all(requests);
+    const oddsTemplate: IOdd[] = hands.map(hand => ({
+      win: 0,
+      tie: 0,
+      hand: _.isEmpty(hand) ? 'random' : cardsToString(hand)
+    }));
+
+    return parseOdds(allOdds, oddsTemplate, numRandom);
+  } catch (e) {
+    throw Error('Could not complete request');
+  }
+}
+
+const parseOdds = (
+  allOdds: Array<{ odds: IOdd[] }>,
+  template: IOdd[],
+  numRandom: number
+) => {
+  const newOdds: any = template.map(x => []);
+
+  allOdds.forEach((odd, index) => {
+    odd.odds.forEach((o, i) => {
+      newOdds[i][index] = o;
+    });
+  });
+
+  const parsedOdds = newOdds.map((o: IOdd[], idx: number) => {
+    return o.reduce((acc: IOdd, odd: IOdd) => {
+      return {
+        win: acc.win + odd.win,
+        tie: acc.tie + odd.tie,
+        hand: odd.hand
+      };
+    }, template[idx]);
+  });
+
+  return parsedOdds.map((o: IOdd) => {
+    if (o.hand === 'random') {
+      return {
+        win: twoDecimals(o.win / allOdds.length / numRandom),
+        tie: twoDecimals(o.tie / allOdds.length / numRandom),
+        hand: o.hand
+      };
+    }
+    return {
+      win: twoDecimals(o.win / allOdds.length),
+      tie: twoDecimals(o.tie / allOdds.length),
+      hand: o.hand
+    };
+  });
+};

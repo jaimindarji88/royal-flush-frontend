@@ -58,10 +58,10 @@ class PokerHistogram extends React.Component<Props> {
   public componentDidUpdate(oldProps: Props) {
     const { game, updateHistogram } = this.props;
 
-    if (!_.isEqual(game.player.cards, oldProps.game.player.cards)) {
+    if (!_.isEqual(game.player, oldProps.game.player)) {
       const { player, others, board } = game;
       updateHistogram({
-        hand: player.cards,
+        hand: player,
         others,
         board
       });
