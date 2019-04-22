@@ -92,10 +92,10 @@ export async function getOdds(hands: Card[][], board: Card[]) {
   }
 
   try {
-    const { odds } = await postJSON(routes.odds(), body);
-    // return odds;
+    const { odds } = await postJSON(routes.odds('10'), body);
+    const twoDecimals = (num: number) => Math.round(num * 100 * 100) / 100;
+
     return odds.map((odd: Odd) => {
-      const twoDecimals = (num: number) => Math.round(num * 100 * 100) / 100;
       return {
         hand: odd.hand,
         win: twoDecimals(odd.win),

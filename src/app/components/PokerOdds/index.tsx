@@ -1,10 +1,11 @@
 import * as _ from 'lodash';
 import * as React from 'react';
 import { connect } from 'react-redux';
+import * as UUID from 'uuid';
 
 import { cardsToString } from '../../api/requests';
 import * as boardActions from '../../modules/board/actions';
-import { GameState } from '../../modules/board/types';
+import { GameOdds, GameState } from '../../modules/board/types';
 import { AppState } from '../../store/reducers';
 
 interface DispatchProps {
@@ -14,10 +15,17 @@ interface StateProps {
   game: GameState;
 }
 
-function OddsComponent(props: any) {
+interface OddsProps {
+  odds: GameOdds;
+  player: string;
+}
+
+function OddsComponent(props: OddsProps) {
   return (
-    <div>
-      <b>Player ({props.odds.hand})</b>
+    <div style={{ marginLeft: '10px' }}>
+      <b>
+        {props.player} ({props.odds.hand})
+      </b>
       <br />
       <span>Win %: {props.odds.win}</span>
       <br />
@@ -34,10 +42,24 @@ class PokerOdds extends React.Component<Props> {
 
     const playerString = cardsToString(player);
 
-    const playerOdds = odds.find(odd => odd.hand === playerString);
+    const playerOdds = odds.find(odd => odd.hand === playerString) as GameOdds;
+    const otherOdds = odds.filter(odd => odd.hand !== playerString);
     console.log(playerOdds);
-
-    return !_.isEmpty(playerOdds) && <OddsComponent odds={playerOdds} />;
+    return (
+      <div style={{ display: 'flex', flexWrap: 'nowrap', marginLeft: '5px' }}>
+        {!_.isEmpty(playerOdds) && (
+          <OddsComponent odds={playerOdds} player="Player" />
+        )}
+        {!_.isEmpty(otherOdds) &&
+          otherOdds.map((odd, idx) => (
+            <OddsComponent
+              key={UUID.v4()}
+              odds={odd}
+              player={'Other ' + (idx + 1)}
+            />
+          ))}
+      </div>
+    );
   }
   public componentDidUpdate(oldProps: Props) {
     const { game, updateOdds } = this.props;
@@ -54,7 +76,7 @@ class PokerOdds extends React.Component<Props> {
           hands.push({} as any);
         }
       }
-
+      console.log('should update');
       updateOdds({
         hands,
         board
