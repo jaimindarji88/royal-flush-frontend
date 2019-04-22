@@ -44,7 +44,7 @@ class PokerOdds extends React.Component<Props> {
 
     const playerOdds = odds.find(odd => odd.hand === playerString) as GameOdds;
     const otherOdds = odds.filter(odd => odd.hand !== playerString);
-    console.log(playerOdds);
+
     return (
       <div style={{ display: 'flex', flexWrap: 'nowrap', marginLeft: '5px' }}>
         {!_.isEmpty(playerOdds) && (
@@ -76,7 +76,7 @@ class PokerOdds extends React.Component<Props> {
           hands.push({} as any);
         }
       }
-      console.log('should update');
+
       updateOdds({
         hands,
         board

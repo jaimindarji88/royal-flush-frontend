@@ -76,7 +76,8 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "jest"
+    "test": "jest",
+    "start-rf": "cd ../royal-flush && npm start"
   },
   "devDependencies": {
     "@types/jest": "^23.3.9",

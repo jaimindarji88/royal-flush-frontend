@@ -69,7 +69,18 @@ export async function getHistogram(
   }
 }
 
-export async function getOdds(hands: Card[][], board: Card[]) {
+interface IOdd {
+  win: number;
+  tie: number;
+  hand: string;
+}
+const twoDecimals = (num: number) => Math.round(num * 100 * 100) / 100;
+
+export async function getOdds(
+  hands: Card[][],
+  board: Card[],
+  numRequests: number = 5
+) {
   const RANDOM = '.';
 
   interface Body {
@@ -81,28 +92,84 @@ export async function getOdds(hands: Card[][], board: Card[]) {
     hands: hands.map(hand => (_.isEmpty(hand) ? RANDOM : cardsToString(hand)))
   };
 
+  const numRandom = hands.filter(_.isEmpty).length;
+  console.log(numRandom);
+
   if (board.length) {
     body.board = cardsToString(board);
   }
 
-  interface Odd {
-    win: number;
-    tie: number;
-    hand: string;
-  }
-
   try {
-    const { odds } = await postJSON(routes.odds('10'), body);
-    const twoDecimals = (num: number) => Math.round(num * 100 * 100) / 100;
+    if (numRandom === 1) {
+      const { odds } = await postJSON(routes.odds('10'), body);
 
-    return odds.map((odd: Odd) => {
-      return {
-        hand: odd.hand,
-        win: twoDecimals(odd.win),
-        tie: twoDecimals(odd.tie)
-      };
-    });
+      return odds.map((odd: IOdd) => {
+        return {
+          hand: odd.hand,
+          win: twoDecimals(odd.win),
+          tie: twoDecimals(odd.tie)
+        };
+      });
+    }
+
+    // nit api goes very slowly for > 2 random hands
+    // so we're doing many requests with low number of iterations
+    // in parallel
+    const requests = [];
+    for (let i = 0; i < numRequests; i++) {
+      requests.push(postJSON(routes.odds('10'), body));
+    }
+
+    const allOdds = await Promise.all(requests);
+    const oddsTemplate: IOdd[] = hands.map(hand => ({
+      win: 0,
+      tie: 0,
+      hand: _.isEmpty(hand) ? 'random' : cardsToString(hand)
+    }));
+    const o = parseOdds(allOdds, oddsTemplate, numRandom);
+
+    console.log(o);
+    return o;
   } catch (e) {
     throw Error('Could not complete request');
   }
 }
+
+const parseOdds = (
+  allOdds: Array<{ odds: IOdd[] }>,
+  template: IOdd[],
+  numRandom: number
+) => {
+  const newOdds: any = template.map(x => []);
+
+  allOdds.forEach((odd, index) => {
+    odd.odds.forEach((o, i) => {
+      newOdds[i][index] = o;
+    });
+  });
+
+  const parsedOdds = newOdds.map((o: IOdd[], idx: number) => {
+    return o.reduce((acc: IOdd, odd: IOdd) => {
+      return {
+        win: acc.win + odd.win,
+        tie: acc.tie + odd.tie,
+        hand: odd.hand
+      };
+    }, template[idx]);
+  });
+
+  return parsedOdds.map((o: IOdd) => {
+    if (o.hand === 'random') {
+      return {
+        win: twoDecimals(o.win / allOdds.length / numRandom),
+        tie: twoDecimals(o.tie / allOdds.length / numRandom),
+        hand: o.hand
+      };
+    }
+    return {
+      win: twoDecimals(o.win / allOdds.length),
+      tie: twoDecimals(o.tie / allOdds.length),
+      hand: o.hand
+    };
+  });
+};
