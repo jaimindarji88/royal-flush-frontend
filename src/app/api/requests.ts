@@ -100,8 +100,8 @@ export async function getOdds(
   }
 
   try {
-    if (numRandom === 1) {
-      const { odds } = await postJSON(routes.odds('10'), body);
+    if ([0, 1].includes(numRandom)) {
+      const { odds } = await postJSON(routes.odds(), body);
 
       return odds.map((odd: IOdd) => {
         return {
