@@ -1,7 +1,8 @@
 import { AUTH, FirebaseState } from './types';
 
 export const INITIAL_STATE: FirebaseState = {
-  user: undefined
+  user: undefined,
+  key: undefined
 };
 
 export default (state: FirebaseState = INITIAL_STATE, action: any) => {
@@ -15,6 +16,11 @@ export default (state: FirebaseState = INITIAL_STATE, action: any) => {
       return {
         ...state,
         user: undefined
+      };
+    case AUTH.UPDATE_KEY:
+      return {
+        ...state,
+        key: action.payload
       };
     default:
       return state;

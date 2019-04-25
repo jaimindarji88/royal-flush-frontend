@@ -10,18 +10,21 @@ const users = myFirebase.firestore().collection('users');
 export const fetchUser = () => (dispatch: Dispatch) => {
   auth.onAuthStateChanged(user => {
     if (user) {
-      users
-        .doc(user.uid)
-        .get()
-        .then((doc: firebase.firestore.DocumentSnapshot) => {
-          if (doc.exists) {
-            return;
-          } else {
-            users.doc(user.uid).set({
-              games: []
+      const games = users.doc(user.uid).collection('games');
+      games.get().then((doc: firebase.firestore.QuerySnapshot) => {
+        if (doc.empty) {
+          games
+            .add({
+              updatedAt: myFirebase.firestore.FieldValue.serverTimestamp()
+            })
+            .then(game => {
+              dispatch({
+                type: AUTH.UPDATE_KEY,
+                payload: game.id
+              });
             });
-          }
-        });
+        }
+      });
 
       dispatch({
         payload: user,

@@ -1,9 +1,7 @@
 export enum AUTH {
-  LOGIN = 'LOGIN',
-  LOGOUT = 'LOGOUT',
-  ERROR = 'ERROR',
   FETCH_USER = 'FETCH_USER',
-  SIGN_OUT = 'SIGN_OUT'
+  SIGN_OUT = 'SIGN_OUT',
+  UPDATE_KEY = 'UPDATE_KEY'
 }
 
 export interface AuthMap {
@@ -12,6 +10,7 @@ export interface AuthMap {
 
 export interface FirebaseState {
   user?: firebase.User;
+  key?: string;
 }
 
 export type AuthState = AuthMap;
