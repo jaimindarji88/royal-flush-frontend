@@ -4,7 +4,7 @@ import * as React from 'react';
 import * as uuid from 'uuid';
 
 import { connect } from 'react-redux';
-import * as boardActions from '../../modules/board/actions';
+import * as boardActions from '../../modules/game/actions';
 
 interface DispatchProps {
   editNumPlayers: typeof boardActions['editNumPlayers'];

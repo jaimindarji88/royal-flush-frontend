@@ -1,26 +1,32 @@
-import { AUTH, FirebaseState } from './types';
+import { FIREBASE, FirebaseState } from './types';
 
 export const INITIAL_STATE: FirebaseState = {
   user: undefined,
-  key: undefined
+  key: undefined,
+  games: []
 };
 
 export default (state: FirebaseState = INITIAL_STATE, action: any) => {
   switch (action.type) {
-    case AUTH.FETCH_USER:
+    case FIREBASE.FETCH_USER:
       return {
         ...state,
         user: action.payload
       };
-    case AUTH.SIGN_OUT:
+    case FIREBASE.SIGN_OUT:
       return {
         ...state,
         user: undefined
       };
-    case AUTH.UPDATE_KEY:
+    case FIREBASE.UPDATE_KEY:
       return {
         ...state,
         key: action.payload
+      };
+    case FIREBASE.UPDATE_GAMES:
+      return {
+        ...state,
+        games: action.payload
       };
     default:
       return state;

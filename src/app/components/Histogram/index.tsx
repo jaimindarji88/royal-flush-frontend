@@ -10,8 +10,8 @@ import {
   YAxis
 } from 'react-vis';
 
-import * as boardActions from '../../modules/board/actions';
-import { GameState } from '../../modules/board/types';
+import * as boardActions from '../../modules/game/actions';
+import { GameState } from '../../modules/game/types';
 import { AppState } from '../../store/reducers';
 
 interface DispatchProps {
