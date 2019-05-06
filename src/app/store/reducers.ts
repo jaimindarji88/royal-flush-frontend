@@ -5,8 +5,8 @@ import firebase, {
 } from '../modules/firebase';
 import { FirebaseState } from '../modules/firebase/types';
 
-import game, { INITIAL_STATE as gameInitial } from '../modules/board';
-import { GameState } from '../modules/board/types';
+import game, { INITIAL_STATE as gameInitial } from '../modules/game';
+import { GameState } from '../modules/game/types';
 
 export interface AppState {
   firebase: FirebaseState;

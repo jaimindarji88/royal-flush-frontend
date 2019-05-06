@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 
 import { titleize } from '../constants';
-import { Card } from '../modules/board/types';
+import { Card } from '../modules/game/types';
 import { routes } from './constants';
 
 async function postJSON(url: string, body: any) {

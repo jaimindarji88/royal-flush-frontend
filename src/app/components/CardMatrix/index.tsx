@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import * as UUID from 'uuid';
 
 import { cards } from '../../constants';
-import { boardActions } from '../../modules/board';
+import { boardActions } from '../../modules/game';
 import CardButton from '../CardButton';
 
 interface DispatchProps {

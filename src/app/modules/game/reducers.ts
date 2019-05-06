@@ -7,7 +7,8 @@ export const INITIAL_STATE: GameState = {
   player: [],
   player_count: 2,
   histogram: histogramKeys.map(hand => ({ x: 0, y: titleize(hand) })),
-  odds: []
+  odds: [],
+  id: ''
 };
 
 export default (state: GameState = INITIAL_STATE, action: any) => {
@@ -41,6 +42,11 @@ export default (state: GameState = INITIAL_STATE, action: any) => {
       return {
         ...state,
         odds: action.payload
+      };
+    case GAME.UPDATE_ID:
+      return {
+        ...state,
+        id: action.payload
       };
     default:
       return state;
