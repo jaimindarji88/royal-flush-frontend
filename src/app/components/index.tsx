@@ -1,11 +1,12 @@
-import * as _ from "lodash";
-import * as React from "react";
-import * as GridLayout from "react-grid-layout";
+import * as _ from 'lodash';
+import * as React from 'react';
+import * as GridLayout from 'react-grid-layout';
 
-import CardMatrix from "./CardMatrix";
-import PokerHistogram from "./Histogram";
-import Players from "./Players";
-import PokerOdds from "./PokerOdds";
+import CardMatrix from './CardMatrix';
+import PokerHistogram from './Histogram';
+import History from './History';
+import Players from './Players';
+import PokerOdds from './PokerOdds';
 
 export default function(props: {}) {
   return (
@@ -25,9 +26,9 @@ export default function(props: {}) {
           static: true
         }}
       >
-        Hi Story
+        <History />
       </div>
-      <div key='card-matrix' data-grid={{ x: 5, y: 0, w: 6, h: 12 }}>
+      <div key='card-matrix' data-grid={{ x: 5, y: 0, w: 7, h: 12 }}>
         <CardMatrix />
       </div>
       <div key='players' data-grid={{ x: 10, y: 0, w: 1, h: 5 }}>

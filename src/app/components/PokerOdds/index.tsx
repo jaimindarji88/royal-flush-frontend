@@ -42,13 +42,14 @@ class PokerOdds extends React.Component<Props> {
 
     const playerString = cardsToString(player);
 
+    console.log(odds);
     const playerOdds = odds.find(odd => odd.hand === playerString) as GameOdds;
     const otherOdds = odds.filter(odd => odd.hand !== playerString);
 
     return (
       <div style={{ display: 'flex', flexWrap: 'nowrap', marginLeft: '5px' }}>
         {!_.isEmpty(playerOdds) && (
-          <OddsComponent odds={playerOdds} player="Player" />
+          <OddsComponent odds={playerOdds} player='Player' />
         )}
         {!_.isEmpty(otherOdds) &&
           otherOdds.map((odd, idx) => (

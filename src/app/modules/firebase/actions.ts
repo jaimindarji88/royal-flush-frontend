@@ -1,7 +1,7 @@
-// import * as crypto from 'crypto'
+import * as _ from 'lodash';
 import { Dispatch } from 'redux';
 
-import { GAME } from '../game/types';
+import { GAME, GameState } from '../game/types';
 import myFirebase from './config';
 import { FIREBASE } from './types';
 
@@ -40,10 +40,10 @@ export const fetchUser = () => (dispatch: Dispatch) => {
 
                 // update redux data if needed
                 const data = d.data();
-                if (data.player) {
+                if (!_.isEmpty(data.odds)) {
                   dispatch({
                     type: GAME.UPDATE_ODDS,
-                    payload: data
+                    payload: data.odds
                   });
                 }
               });
@@ -65,4 +65,30 @@ export const signOut = () => (dispatch: Dispatch) => {
       type: FIREBASE.SIGN_OUT
     });
   });
+};
+
+export const getGames = (userId: string) => (dispatch: Dispatch) => {
+  console.log(userId);
+  users
+    .doc(userId)
+    .collection('games')
+    .get()
+    .then(snapshot => {
+      dispatch({
+        type: FIREBASE.UPDATE_GAMES,
+        payload: snapshot.docs.map(d => d.data())
+      });
+    });
+};
+
+export const setGame = (userId: string, game: GameState, gameId?: string) => (
+  dispatch: Dispatch
+) => {
+  const games = users.doc(userId).collection('games');
+
+  if (gameId) {
+    games.doc(gameId).set(game);
+  } else {
+    // const ref = games.doc();
+  }
 };

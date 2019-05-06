@@ -1,6 +1,6 @@
-import * as _ from 'lodash';
-import * as React from 'react';
-import { connect } from 'react-redux';
+import * as _ from "lodash";
+import * as React from "react";
+import { connect } from "react-redux";
 import {
   FlexibleXYPlot,
   HorizontalBarSeries,
@@ -8,14 +8,14 @@ import {
   VerticalGridLines,
   XAxis,
   YAxis
-} from 'react-vis';
+} from "react-vis";
 
-import * as boardActions from '../../modules/game/actions';
-import { GameState } from '../../modules/game/types';
-import { AppState } from '../../store/reducers';
+import * as boardActions from "../../modules/game/actions";
+import { GameState } from "../../modules/game/types";
+import { AppState } from "../../store/reducers";
 
 interface DispatchProps {
-  updateHistogram: typeof boardActions['updateHistogram'];
+  updateHistogram: typeof boardActions["updateHistogram"];
 }
 interface StateProps {
   game: GameState;
@@ -30,7 +30,7 @@ class PokerHistogram extends React.Component<Props> {
       <FlexibleXYPlot
         xDomain={[0, 100]}
         width={400}
-        yType="ordinal"
+        yType='ordinal'
         margin={{ left: 100 }}
         animated={true}
       >
@@ -44,12 +44,12 @@ class PokerHistogram extends React.Component<Props> {
             label: d.x.toString(),
             style: {
               fontSize: 10,
-              display: d.x === 0 ? 'none' : 'inherit'
+              display: d.x === 0 ? "none" : "inherit"
             },
             xOffset: 5
           }))}
-          labelAnchorX="text-after-edge"
-          labelAnchorY="middle"
+          labelAnchorX='text-after-edge'
+          labelAnchorY='middle'
           animation={true}
         />
       </FlexibleXYPlot>
