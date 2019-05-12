@@ -1,9 +1,11 @@
 import * as _ from 'lodash';
 import { Dispatch } from 'redux';
 
+// import { fireStoreHandToString } from '../../utilities';
+import { firestoreHandToCards, stringToCard } from '../../utilities';
 import { GAME, GameState } from '../game/types';
 import myFirebase from './config';
-import { FIREBASE } from './types';
+import { FIREBASE, FirestoreGame } from './types';
 
 const auth = myFirebase.auth();
 const users = myFirebase.firestore().collection('users');
@@ -68,27 +70,47 @@ export const signOut = () => (dispatch: Dispatch) => {
 };
 
 export const getGames = (userId: string) => (dispatch: Dispatch) => {
-  console.log(userId);
   users
     .doc(userId)
     .collection('games')
     .get()
     .then(snapshot => {
+      // dispatch({
+      //   type: FIREBASE.UPDATE_GAMES,
+      //   payload: snapshot.docs.map(d => d.data())
+      // });
+      const newGames = snapshot.docs
+        .map(d => d.data())
+        .map(
+          (game: FirestoreGame): GameState => {
+            return {
+              ...game,
+              player: firestoreHandToCards(game.player),
+              board: game.board.map(str => stringToCard(str)),
+              others: game.others.map(hand => firestoreHandToCards(hand))
+            };
+          }
+        );
+
       dispatch({
         type: FIREBASE.UPDATE_GAMES,
-        payload: snapshot.docs.map(d => d.data())
+        payload: newGames
       });
     });
 };
 
-export const setGame = (userId: string, game: GameState, gameId?: string) => (
+export const setGame = (userId: string, game: GameState) => (
   dispatch: Dispatch
 ) => {
-  const games = users.doc(userId).collection('games');
-
-  if (gameId) {
-    games.doc(gameId).set(game);
-  } else {
-    // const ref = games.doc();
-  }
+  users
+    .doc(userId)
+    .collection('games')
+    .doc(game.id)
+    .set(game)
+    .then(() => {
+      dispatch({
+        type: FIREBASE.ADD_GAME,
+        payload: game
+      });
+    });
 };

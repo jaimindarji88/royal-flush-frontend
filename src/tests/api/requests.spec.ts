@@ -1,6 +1,6 @@
 import * as seedrandom from 'seedrandom';
 
-import { cardsToString } from '../../app/api/requests';
+import { cardsToString } from '../../app/utilities';
 
 describe('should turn card object to a string', () => {
   beforeEach(() => {

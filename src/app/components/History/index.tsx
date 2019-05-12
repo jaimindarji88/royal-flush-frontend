@@ -1,33 +1,26 @@
+import { Column } from 'bloomer';
 import * as _ from 'lodash';
 import * as React from 'react';
 import { connect } from 'react-redux';
 
-import { firestore } from 'firebase';
-
 import * as firebaseActions from '../../modules/firebase/actions';
 import { FirebaseState } from '../../modules/firebase/types';
-import { AppState } from '../../store/reducers';
-
-import { Card, CardContent, CardHeader, Content } from 'bloomer';
+import * as gameActions from '../../modules/game/actions';
 import { GameState } from '../../modules/game/types';
+import { AppState } from '../../store/reducers';
+import GameCard from './GameCard';
+
+import './history.css';
 
 interface DispatchProps {
   getGames: typeof firebaseActions['getGames'];
+  setGame: typeof firebaseActions['setGame'];
+  updateGame: typeof gameActions['updateGame'];
 }
 
 interface StateProps {
   firebase: FirebaseState;
-}
-
-function GameCard(game: GameState) {
-  return (
-    <Card>
-      <CardHeader>Header</CardHeader>
-      <CardContent>
-        <Content>Content</Content>
-      </CardContent>
-    </Card>
-  );
+  game: GameState;
 }
 
 type Props = StateProps & DispatchProps;
@@ -35,14 +28,17 @@ type Props = StateProps & DispatchProps;
 class History extends React.Component<Props, {}> {
   constructor(props: Props) {
     super(props);
-    console.log(firestore.Timestamp.fromDate(new Date()));
   }
 
   public componentDidUpdate(oldProps: Props) {
-    const { user } = this.props.firebase;
+    const { user, games } = this.props.firebase;
 
     if (user && this.isChanged(oldProps)) {
       this.props.getGames(user.uid);
+    }
+
+    if (games.length && _.isEmpty(this.props.game.player)) {
+      this.props.updateGame(games[0]);
     }
   }
 
@@ -50,13 +46,12 @@ class History extends React.Component<Props, {}> {
     const { games } = this.props.firebase;
 
     return (
-      <div className='history'>
-        <h6 className='title is-6'>Game History</h6>
-        <ul>
+      <div className='history' style={{ overflow: 'auto', height: '350px' }}>
+        <Column className='games'>
           {games.map(game => (
-            <li key={game.id}>{GameCard(game)}</li>
+            <GameCard game={game} key={game.id} />
           ))}
-        </ul>
+        </Column>
       </div>
     );
   }
@@ -69,9 +64,12 @@ class History extends React.Component<Props, {}> {
 
 export default connect(
   (state: AppState) => ({
-    firebase: state.firebase
+    firebase: state.firebase,
+    game: state.game
   }),
   {
-    getGames: firebaseActions.getGames
+    getGames: firebaseActions.getGames,
+    setGame: firebaseActions.setGame,
+    updateGame: gameActions.updateGame
   }
 )(History);

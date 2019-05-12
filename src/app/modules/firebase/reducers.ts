@@ -28,6 +28,19 @@ export default (state: FirebaseState = INITIAL_STATE, action: any) => {
         ...state,
         games: action.payload
       };
+    case FIREBASE.ADD_GAME:
+      return {
+        ...state,
+        games: state.games.map(game => {
+          if (game.id === action.payload.id) {
+            return {
+              ...game,
+              ...action.payload
+            };
+          }
+          return game;
+        })
+      };
     default:
       return state;
   }
