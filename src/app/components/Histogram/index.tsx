@@ -34,9 +34,9 @@ class PokerHistogram extends React.Component<Props> {
     return (
       <FlexibleXYPlot
         xDomain={[0, 100]}
-        width={400}
+        width={500}
         yType='ordinal'
-        margin={{ left: 100 }}
+        margin={{ left: 100, right: 50 }}
         animated={true}
       >
         <VerticalGridLines />

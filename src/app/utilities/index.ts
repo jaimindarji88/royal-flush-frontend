@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 
-import { FirestoreHand } from '../modules/firebase/types';
-import { Card } from '../modules/game/types';
+import { FirestoreGame, FirestoreHand } from '../modules/firebase/types';
+import { Card, GameState } from '../modules/game/types';
 
 export const cardsToString = (cards: Card[]) => {
   // @ts-ignore
@@ -23,6 +23,10 @@ export const cardsToString = (cards: Card[]) => {
   });
   return str;
 };
+
+export const gameToFirestore = (game: GameState): FirestoreGame => {};
+
+export const cardsToFirestore = (hand: Card[]): FirestoreHand => {};
 
 export const firestoreHandToCards = (hand: FirestoreHand): Card[] => {
   return [stringToCard(hand[0]), stringToCard(hand[1])];
