@@ -1,9 +1,10 @@
 import * as _ from 'lodash';
 import { Dispatch } from 'redux';
 
-// import { fireStoreHandToString } from '../../utilities';
-import { firestoreHandToCards, stringToCard } from '../../utilities';
-import { GAME, GameState } from '../game/types';
+import { firestore } from 'firebase';
+import { firestoreToGame } from '../../utilities';
+import { INITIAL_STATE as gameInit } from '../game/index';
+import { GAME } from '../game/types';
 import myFirebase from './config';
 import { FIREBASE, FirestoreGame } from './types';
 
@@ -19,7 +20,7 @@ export const fetchUser = () => (dispatch: Dispatch) => {
           // create a new game theres no games for this user
           games
             .add({
-              createdAt: myFirebase.firestore.FieldValue.serverTimestamp()
+              createdAt: firestore.FieldValue.serverTimestamp()
             })
             .then(game => {
               dispatch({
@@ -75,22 +76,7 @@ export const getGames = (userId: string) => (dispatch: Dispatch) => {
     .collection('games')
     .get()
     .then(snapshot => {
-      // dispatch({
-      //   type: FIREBASE.UPDATE_GAMES,
-      //   payload: snapshot.docs.map(d => d.data())
-      // });
-      const newGames = snapshot.docs
-        .map(d => d.data())
-        .map(
-          (game: FirestoreGame): GameState => {
-            return {
-              ...game,
-              player: firestoreHandToCards(game.player),
-              board: game.board.map(str => stringToCard(str)),
-              others: game.others.map(hand => firestoreHandToCards(hand))
-            };
-          }
-        );
+      const newGames = snapshot.docs.map(d => d.data()).map(firestoreToGame);
 
       dispatch({
         type: FIREBASE.UPDATE_GAMES,
@@ -99,18 +85,33 @@ export const getGames = (userId: string) => (dispatch: Dispatch) => {
     });
 };
 
-export const setGame = (userId: string, game: GameState) => (
+export const setGame = (userId: string, game: FirestoreGame) => (
   dispatch: Dispatch
 ) => {
   users
     .doc(userId)
     .collection('games')
     .doc(game.id)
+    .set(game);
+};
+
+export const newGame = (userId: string) => (dispatch: Dispatch) => {
+  const gamesRef = users.doc(userId).collection('games');
+  const ref = gamesRef.doc();
+
+  const game = {
+    ...gameInit,
+    id: ref.id,
+    createdAt: firestore.FieldValue.serverTimestamp(),
+    updatedAt: null
+  };
+  gamesRef
+    .doc(ref.id)
     .set(game)
     .then(() => {
       dispatch({
-        type: FIREBASE.ADD_GAME,
-        payload: game
+        type: GAME.UPDATE,
+        payload: newGame
       });
     });
 };

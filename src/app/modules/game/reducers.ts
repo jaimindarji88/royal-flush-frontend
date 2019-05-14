@@ -11,7 +11,7 @@ export const INITIAL_STATE: GameState = {
   odds: [],
   id: '',
   createdAt: firestore.Timestamp.fromDate(new Date()),
-  updatedAt: undefined
+  updatedAt: null
 };
 
 export default (state: GameState = INITIAL_STATE, action: any) => {

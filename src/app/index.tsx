@@ -7,11 +7,12 @@ import Header from './components/Header';
 import { firebaseActions } from './modules/firebase';
 import { GameState } from './modules/game/types';
 import { AppState } from './store/reducers';
+import { gameToFirestore } from './utilities';
 
 interface DispatchProps {
   fetchUser: typeof firebaseActions['fetchUser'];
-  signOut: typeof firebaseActions['signOut'];
   setGame: typeof firebaseActions['setGame'];
+  newGame: typeof firebaseActions['newGame'];
 }
 
 interface StateProps {
@@ -22,6 +23,12 @@ interface StateProps {
 type Props = DispatchProps & StateProps;
 
 class App extends React.Component<Props, any> {
+  constructor(props: Props) {
+    super(props);
+
+    this.createNewGame = this.createNewGame.bind(this);
+  }
+
   public async componentDidMount() {
     const { fetchUser } = this.props;
 
@@ -29,11 +36,9 @@ class App extends React.Component<Props, any> {
   }
 
   public render() {
-    const { signOut } = this.props;
-
     return (
       <div className='App'>
-        <Header handleSignOut={signOut} />
+        <Header handleNewGame={this.createNewGame} />
         <Wrapper />
       </div>
     );
@@ -41,8 +46,16 @@ class App extends React.Component<Props, any> {
 
   public componentDidUpdate(oldProps: Props) {
     const { user, game } = this.props;
-    if (user && !_.isEmpty(game.player)) {
-      this.props.setGame(user.uid, game);
+    if (user && !_.isEmpty(game.player) && !_.isEqual(game, oldProps.game)) {
+      const fsGame = gameToFirestore(game);
+      this.props.setGame(user.uid, fsGame);
+    }
+  }
+
+  public createNewGame() {
+    const { user } = this.props;
+    if (user) {
+      this.props.newGame(user.uid);
     }
   }
 }
@@ -54,7 +67,7 @@ export default connect(
   }),
   {
     fetchUser: firebaseActions.fetchUser,
-    signOut: firebaseActions.signOut,
-    setGame: firebaseActions.setGame
+    setGame: firebaseActions.setGame,
+    newGame: firebaseActions.newGame
   }
 )(App);

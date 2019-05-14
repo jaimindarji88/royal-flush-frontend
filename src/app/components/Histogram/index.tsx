@@ -62,17 +62,15 @@ class PokerHistogram extends React.Component<Props> {
   }
   public componentDidUpdate(oldProps: Props) {
     const { game, updateHistogram } = this.props;
+    const { player, others, board, histogram } = game;
 
+    if (
+      !_.isEmpty(histogram) &&
+      _.isEqual(histogram, oldProps.game.histogram)
+    ) {
+      return;
+    }
     if (!_.isEqual(game.player, oldProps.game.player)) {
-      const { player, others, board } = game;
-      if (_.isEmpty(game.histogram)) {
-        updateHistogram({
-          hand: player,
-          others,
-          board
-        });
-      }
-
       updateHistogram({
         hand: player,
         others,

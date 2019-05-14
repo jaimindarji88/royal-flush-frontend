@@ -15,7 +15,7 @@ describe('should turn card object to a string', () => {
 
     const cardString = cardsToString(cards);
 
-    expect(cardString).toEqual('AhKh');
+    expect(cardString).toEqual('AKs');
   });
 
   test('off suit hand', () => {
@@ -26,7 +26,7 @@ describe('should turn card object to a string', () => {
 
     const cardString = cardsToString(cards);
 
-    expect(cardString).toEqual('AdKc');
+    expect(cardString).toEqual('AKo');
   });
 
   test('board', () => {

@@ -1,15 +1,23 @@
-import { Navbar, NavbarEnd, NavbarItem, NavbarStart } from 'bloomer';
+import { Button, Navbar, NavbarEnd, NavbarItem, NavbarStart } from 'bloomer';
 import * as React from 'react';
 import { connect } from 'react-redux';
 
+import * as firebaseActions from '../../modules/firebase/actions';
 import FirebaseSignIn from '../../modules/firebase/component';
 import { AppState } from '../../store/reducers';
 
 import './header.css';
 
-interface Props {
+interface DispatchProps {
+  signOut: typeof firebaseActions['signOut'];
+}
+
+interface StateProps {
   user: firebase.User;
-  handleSignOut: () => void;
+}
+
+interface Props extends DispatchProps, StateProps {
+  handleNewGame: () => void;
 }
 
 export class Header extends React.Component<Props> {
@@ -25,7 +33,7 @@ export class Header extends React.Component<Props> {
     }
 
     return (
-      <div className="header">
+      <div className='header'>
         <Navbar style={{ backgroundColor: 'lightgrey' }}>
           <NavbarStart>
             <NavbarItem>Poker</NavbarItem>
@@ -34,25 +42,43 @@ export class Header extends React.Component<Props> {
             </NavbarItem>
           </NavbarStart>
           <NavbarEnd>
+            <NavbarItem>{this.getNewGameButton()}</NavbarItem>
             <NavbarItem>{this.getAuthButton()}</NavbarItem>
           </NavbarEnd>
         </Navbar>
       </div>
     );
   }
-  private getAuthButton(): JSX.Element {
-    const { user, handleSignOut } = this.props;
+  private getNewGameButton(): JSX.Element {
+    const { user, handleNewGame } = this.props;
     if (user) {
       return (
-        <button onClick={handleSignOut} className="sign-out button is-primary">
+        <Button onClick={handleNewGame} isColor='dark'>
+          New Game
+        </Button>
+      );
+    }
+    return <React.Fragment />;
+  }
+
+  private getAuthButton(): JSX.Element {
+    const { user, signOut } = this.props;
+    if (user) {
+      return (
+        <Button onClick={signOut} className='sign-out' isColor='primary'>
           Sign Out
-        </button>
+        </Button>
       );
     }
     return <FirebaseSignIn />;
   }
 }
 
-export default connect((state: AppState) => ({
-  user: state.firebase.user
-}))(Header);
+export default connect(
+  (state: AppState) => ({
+    user: state.firebase.user
+  }),
+  {
+    signOut: firebaseActions.signOut
+  }
+)(Header);

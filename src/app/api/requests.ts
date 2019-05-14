@@ -45,7 +45,7 @@ export async function getHistogram(
       y: titleize(key)
     }));
   } catch (e) {
-    throw Error('Could not get to the server for histogram');
+    return [];
   }
 }
 
@@ -108,7 +108,7 @@ export async function getOdds(
 
     return parseOdds(allOdds, oddsTemplate, numRandom);
   } catch (e) {
-    throw Error('Could not complete request');
+    return [];
   }
 }
 

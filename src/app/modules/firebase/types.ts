@@ -29,7 +29,7 @@ export interface FirestoreGame {
   others: FirestoreHand[];
   player: FirestoreHand;
   createdAt: firestore.Timestamp;
-  updatedAt?: firestore.Timestamp;
+  updatedAt: firestore.Timestamp | null;
   player_count: number;
   histogram: IHistogram[];
   odds: GameOdds[];

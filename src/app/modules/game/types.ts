@@ -30,7 +30,7 @@ export interface GameOdds {
 
 export interface GameState {
   createdAt: firestore.Timestamp;
-  updatedAt?: firestore.Timestamp;
+  updatedAt: firestore.Timestamp | null;
   board: Card[];
   others: Card[][];
   player_count: number;
