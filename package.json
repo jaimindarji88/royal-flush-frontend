@@ -2,7 +2,7 @@
   "name": "royal-frontend",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://myname.github.io/royal-flush",
+  "homepage": "http://jaimindarji88.github.io/royal-flush",
   "dependencies": {
     "@babel/core": "7.1.0",
     "@svgr/webpack": "2.4.1",
