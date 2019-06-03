@@ -31,13 +31,14 @@ class History extends React.Component<Props, {}> {
   }
 
   public componentDidUpdate(oldProps: Props) {
-    const { user, games } = this.props.firebase;
+    const { user, games, newGame } = this.props.firebase;
+    const { player } = this.props.game;
 
     if (user && this.isChanged(oldProps)) {
       this.props.getGames(user.uid);
     }
 
-    if (games.length && _.isEmpty(this.props.game.player)) {
+    if (games.length && _.isEmpty(player) && newGame === false) {
       this.props.updateGame(games[0]);
     }
   }

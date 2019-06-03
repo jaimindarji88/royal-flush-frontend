@@ -2,6 +2,7 @@
   "name": "royal-frontend",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://myname.github.io/royal-flush",
   "dependencies": {
     "@babel/core": "7.1.0",
     "@svgr/webpack": "2.4.1",
@@ -31,6 +32,7 @@
     "firebase": "^5.5.9",
     "fork-ts-checker-webpack-plugin": "0.4.9",
     "fs-extra": "7.0.0",
+    "gh-pages": "^2.0.1",
     "html-webpack-plugin": "4.0.0-alpha.2",
     "identity-obj-proxy": "3.0.0",
     "jest": "23.6.0",
@@ -75,6 +77,8 @@
     "wretch": "^1.5.1"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "build": "node scripts/build.js",
     "test": "jest",
     "watch": "node scripts/start.js",

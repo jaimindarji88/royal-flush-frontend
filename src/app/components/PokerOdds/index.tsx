@@ -40,6 +40,10 @@ class PokerOdds extends React.Component<Props> {
   public render() {
     const { odds, player } = this.props.game;
 
+    if (_.isEmpty(player)) {
+      return <div>Enter a hand to show the odds</div>;
+    }
+
     if (_.isEmpty(odds)) {
       return <div>Loading...</div>;
     }
@@ -68,6 +72,10 @@ class PokerOdds extends React.Component<Props> {
   }
   public componentDidUpdate(oldProps: Props) {
     const { game, updateOdds } = this.props;
+
+    if (_.isEmpty(game.player)) {
+      return;
+    }
 
     if (!_.isEqual(game.player, oldProps.game.player)) {
       const { player, others, board, player_count } = game;

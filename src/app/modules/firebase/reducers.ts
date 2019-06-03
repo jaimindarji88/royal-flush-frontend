@@ -3,7 +3,8 @@ import { FIREBASE, FirebaseState } from './types';
 export const INITIAL_STATE: FirebaseState = {
   user: undefined,
   key: undefined,
-  games: []
+  games: [],
+  newGame: false
 };
 
 export default (state: FirebaseState = INITIAL_STATE, action: any) => {
@@ -40,6 +41,21 @@ export default (state: FirebaseState = INITIAL_STATE, action: any) => {
           }
           return game;
         })
+      };
+    case FIREBASE.TOGGLE_NEW_GAME:
+      return {
+        ...state,
+        newGame: !state.newGame
+      };
+    case FIREBASE.NEW_GAME_TRUE:
+      return {
+        ...state,
+        newGame: true
+      };
+    case FIREBASE.NEW_GAME_FALSE:
+      return {
+        ...state,
+        newGame: false
       };
     default:
       return state;

@@ -7,6 +7,7 @@ import {
   Columns,
   Content
 } from 'bloomer';
+import * as _ from 'lodash';
 import * as moment from 'moment';
 import * as React from 'react';
 import * as uuid from 'uuid';
@@ -23,6 +24,10 @@ interface CardProps {
 export default function GameCard({ game }: CardProps) {
   const time = game.updatedAt ? game.updatedAt : game.createdAt;
   const date = moment.unix(time.seconds);
+
+  if (_.isEmpty(game.player)) {
+    return <React.Fragment />;
+  }
 
   return (
     <Card className='game'>

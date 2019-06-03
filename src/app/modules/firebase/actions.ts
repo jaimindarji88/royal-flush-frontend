@@ -74,10 +74,24 @@ export const getGames = (userId: string) => (dispatch: Dispatch) => {
   users
     .doc(userId)
     .collection('games')
+    .orderBy('createdAt', 'desc')
+    .limit(25)
     .get()
     .then(snapshot => {
-      const newGames = snapshot.docs.map(d => d.data()).map(firestoreToGame);
+      const newGames = snapshot.docs
+        .map(d => d.data())
+        .map((game: FirestoreGame) => {
+          if (_.isEmpty(game.player)) {
+            return game;
+          }
+          return firestoreToGame(game);
+        });
 
+      if (_.isEmpty(newGames[0].player)) {
+        dispatch({
+          type: FIREBASE.NEW_GAME_TRUE
+        });
+      }
       dispatch({
         type: FIREBASE.UPDATE_GAMES,
         payload: newGames
@@ -96,13 +110,17 @@ export const setGame = (userId: string, game: FirestoreGame) => (
 };
 
 export const newGame = (userId: string) => (dispatch: Dispatch) => {
+  dispatch({
+    type: FIREBASE.NEW_GAME_TRUE
+  });
+
   const gamesRef = users.doc(userId).collection('games');
   const ref = gamesRef.doc();
 
   const game = {
     ...gameInit,
     id: ref.id,
-    createdAt: firestore.FieldValue.serverTimestamp(),
+    createdAt: firestore.Timestamp.fromDate(new Date()),
     updatedAt: null
   };
   gamesRef
@@ -111,7 +129,7 @@ export const newGame = (userId: string) => (dispatch: Dispatch) => {
     .then(() => {
       dispatch({
         type: GAME.UPDATE,
-        payload: newGame
+        payload: game
       });
     });
 };

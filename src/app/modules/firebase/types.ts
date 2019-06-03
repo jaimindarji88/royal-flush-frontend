@@ -6,7 +6,10 @@ export enum FIREBASE {
   SIGN_OUT = 'SIGN_OUT',
   UPDATE_KEY = 'UPDATE_KEY',
   UPDATE_GAMES = 'UPDATE_GAMES',
-  ADD_GAME = 'ADD_GAME'
+  ADD_GAME = 'ADD_GAME',
+  TOGGLE_NEW_GAME = 'TOGGLE_NEW_GAME',
+  NEW_GAME_TRUE = 'NEW_GAME_TRUE',
+  NEW_GAME_FALSE = 'NEW_GAME_FALSE'
 }
 
 export interface AuthMap {
@@ -17,6 +20,7 @@ export interface FirebaseState {
   user?: firebase.User;
   key?: string;
   games: GameState[];
+  newGame: boolean;
 }
 
 export interface FirestoreHand {
