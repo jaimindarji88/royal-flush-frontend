@@ -57,8 +57,8 @@ class PokerHistogram extends React.Component<Props> {
             },
             xOffset: 5
           }))}
-          labelAnchorX='text-after-edge'
-          labelAnchorY='middle'
+          labelAnchorX="text-after-edge"
+          labelAnchorY="middle"
           animation={true}
         />
       </FlexibleXYPlot>
