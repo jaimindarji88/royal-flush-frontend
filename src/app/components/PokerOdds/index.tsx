@@ -3,10 +3,10 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import * as UUID from 'uuid';
 
-import { cardsToString } from '../../api/requests';
 import * as boardActions from '../../modules/game/actions';
 import { GameOdds, GameState } from '../../modules/game/types';
 import { AppState } from '../../store/reducers';
+import { cardsToString } from '../../utilities';
 
 interface DispatchProps {
   updateOdds: typeof boardActions['updateOdds'];
@@ -40,14 +40,22 @@ class PokerOdds extends React.Component<Props> {
   public render() {
     const { odds, player } = this.props.game;
 
+    if (_.isEmpty(player)) {
+      return <div>Enter a hand to show the odds</div>;
+    }
+
+    if (_.isEmpty(odds)) {
+      return <div>Loading...</div>;
+    }
+
     const playerString = cardsToString(player);
 
-    console.log(odds);
     const playerOdds = odds.find(odd => odd.hand === playerString) as GameOdds;
     const otherOdds = odds.filter(odd => odd.hand !== playerString);
 
     return (
       <div style={{ display: 'flex', flexWrap: 'nowrap', marginLeft: '5px' }}>
+        <h6 className='title is-6'>Game Odds</h6>
         {!_.isEmpty(playerOdds) && (
           <OddsComponent odds={playerOdds} player='Player' />
         )}
@@ -65,6 +73,10 @@ class PokerOdds extends React.Component<Props> {
   public componentDidUpdate(oldProps: Props) {
     const { game, updateOdds } = this.props;
 
+    if (_.isEmpty(game.player)) {
+      return;
+    }
+
     if (!_.isEqual(game.player, oldProps.game.player)) {
       const { player, others, board, player_count } = game;
 
@@ -78,10 +90,7 @@ class PokerOdds extends React.Component<Props> {
         }
       }
 
-      updateOdds({
-        hands,
-        board
-      });
+      updateOdds(hands, board);
     }
   }
 }

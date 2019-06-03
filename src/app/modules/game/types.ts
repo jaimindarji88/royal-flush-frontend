@@ -1,3 +1,5 @@
+import { firestore } from 'firebase';
+
 export interface Card {
   card: string;
   suit: string;
@@ -5,6 +7,7 @@ export interface Card {
 }
 
 export enum GAME {
+  UPDATE = 'UPDATE',
   UPDATE_PLAYER_CARDS = 'UPDATE_PLAYER_CARDS',
   ADD_OTHER_CARDS = 'OTHER_CARDS',
   ADD_BOARD = 'ADD_BOARD',
@@ -25,12 +28,9 @@ export interface GameOdds {
   hand: string;
 }
 
-export interface FireStoreDate {
-  seconds: number;
-  nanoseconds: number;
-}
-
 export interface GameState {
+  createdAt: firestore.Timestamp;
+  updatedAt: firestore.Timestamp | null;
   board: Card[];
   others: Card[][];
   player_count: number;

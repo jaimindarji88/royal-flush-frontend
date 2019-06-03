@@ -8,9 +8,9 @@ import store from './app/store/configure';
 import registerServiceWorker from './registerServiceWorker';
 
 import 'bulma/css/bulma.css';
+import 'react-grid-layout/css/styles.css';
+import 'react-resizable/css/styles.css';
 import 'react-vis/dist/style.css';
-import '../node_modules/react-grid-layout/css/styles.css';
-import '../node_modules/react-resizable/css/styles.css';
 
 ReactDOM.render(
   <Provider store={store}>

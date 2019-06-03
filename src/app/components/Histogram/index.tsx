@@ -10,8 +10,8 @@ import {
   YAxis
 } from 'react-vis';
 
-import * as boardActions from '../../modules/board/actions';
-import { GameState } from '../../modules/board/types';
+import * as boardActions from '../../modules/game/actions';
+import { GameState } from '../../modules/game/types';
 import { AppState } from '../../store/reducers';
 
 interface DispatchProps {
@@ -25,13 +25,22 @@ type Props = DispatchProps & StateProps;
 
 class PokerHistogram extends React.Component<Props> {
   public render() {
-    const { histogram } = this.props.game;
+    const { histogram, player } = this.props.game;
+
+    if (_.isEmpty(player)) {
+      return <div>Enter a hand to show the histogram</div>;
+    }
+
+    if (_.isEmpty(histogram)) {
+      return <div>Loading...</div>;
+    }
+
     return (
       <FlexibleXYPlot
         xDomain={[0, 100]}
-        width={400}
-        yType="ordinal"
-        margin={{ left: 100 }}
+        width={500}
+        yType='ordinal'
+        margin={{ left: 100, right: 50 }}
         animated={true}
       >
         <VerticalGridLines />
@@ -57,9 +66,16 @@ class PokerHistogram extends React.Component<Props> {
   }
   public componentDidUpdate(oldProps: Props) {
     const { game, updateHistogram } = this.props;
+    const { player, others, board, histogram } = game;
 
+    if (
+      (!_.isEmpty(histogram) &&
+        _.isEqual(histogram, oldProps.game.histogram)) ||
+      _.isEmpty(player)
+    ) {
+      return;
+    }
     if (!_.isEqual(game.player, oldProps.game.player)) {
-      const { player, others, board } = game;
       updateHistogram({
         hand: player,
         others,

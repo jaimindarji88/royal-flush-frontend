@@ -22,10 +22,12 @@ export default function(props: {}) {
           x: 0,
           y: 0,
           w: 5,
-          h: 10,
-          static: true
+          h: 10
         }}
       >
+        <div className='title is-6' style={{ margin: 0 }}>
+          History
+        </div>
         <History />
       </div>
       <div key='card-matrix' data-grid={{ x: 5, y: 0, w: 7, h: 12 }}>

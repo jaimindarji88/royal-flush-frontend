@@ -1,3 +1,4 @@
+import { firestore } from 'firebase';
 import { histogramKeys, titleize } from '../../constants';
 import { GAME, GameState } from './types';
 
@@ -8,7 +9,9 @@ export const INITIAL_STATE: GameState = {
   player_count: 2,
   histogram: histogramKeys.map(hand => ({ x: 0, y: titleize(hand) })),
   odds: [],
-  id: ''
+  id: '',
+  createdAt: firestore.Timestamp.fromDate(new Date()),
+  updatedAt: null
 };
 
 export default (state: GameState = INITIAL_STATE, action: any) => {
@@ -47,6 +50,10 @@ export default (state: GameState = INITIAL_STATE, action: any) => {
       return {
         ...state,
         id: action.payload
+      };
+    case GAME.UPDATE:
+      return {
+        ...action.payload
       };
     default:
       return state;

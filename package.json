@@ -2,6 +2,7 @@
   "name": "royal-frontend",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://jaimindarji88.github.io/royal-flush",
   "dependencies": {
     "@babel/core": "7.1.0",
     "@svgr/webpack": "2.4.1",
@@ -31,11 +32,13 @@
     "firebase": "^5.5.9",
     "fork-ts-checker-webpack-plugin": "0.4.9",
     "fs-extra": "7.0.0",
+    "gh-pages": "^2.0.1",
     "html-webpack-plugin": "4.0.0-alpha.2",
     "identity-obj-proxy": "3.0.0",
     "jest": "23.6.0",
     "lodash": "^4.17.11",
     "mini-css-extract-plugin": "0.4.3",
+    "moment": "^2.24.0",
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "postcss-flexbugs-fixes": "4.1.0",
     "postcss-loader": "3.0.0",
@@ -74,10 +77,13 @@
     "wretch": "^1.5.1"
   },
   "scripts": {
-    "start": "node scripts/start.js",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "build": "node scripts/build.js",
     "test": "jest",
-    "start-rf": "cd ../royal-flush && npm start"
+    "watch": "node scripts/start.js",
+    "start-rf": "cd ../royal-flush && npm start",
+    "start": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Serverless\" -c \"cyan.bold,yellow.bold\" \"npm run watch\" \"npm run start-rf\""
   },
   "devDependencies": {
     "@types/jest": "^23.3.9",
@@ -90,6 +96,7 @@
     "@types/seedrandom": "^2.4.28",
     "@types/uuid": "^3.4.4",
     "@types/webpack": "^4.4.26",
+    "concurrently": "^4.1.0",
     "redux-devtools-extension": "^2.13.7",
     "typescript": "^3.1.6"
   },

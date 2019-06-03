@@ -1,9 +1,12 @@
 import * as _ from 'lodash';
 import { Dispatch } from 'redux';
 
-import { GAME, GameState } from '../game/types';
+import { firestore } from 'firebase';
+import { firestoreToGame } from '../../utilities';
+import { INITIAL_STATE as gameInit } from '../game/index';
+import { GAME } from '../game/types';
 import myFirebase from './config';
-import { FIREBASE } from './types';
+import { FIREBASE, FirestoreGame } from './types';
 
 const auth = myFirebase.auth();
 const users = myFirebase.firestore().collection('users');
@@ -17,7 +20,7 @@ export const fetchUser = () => (dispatch: Dispatch) => {
           // create a new game theres no games for this user
           games
             .add({
-              createdAt: myFirebase.firestore.FieldValue.serverTimestamp()
+              createdAt: firestore.FieldValue.serverTimestamp()
             })
             .then(game => {
               dispatch({
@@ -68,27 +71,65 @@ export const signOut = () => (dispatch: Dispatch) => {
 };
 
 export const getGames = (userId: string) => (dispatch: Dispatch) => {
-  console.log(userId);
   users
     .doc(userId)
     .collection('games')
+    .orderBy('createdAt', 'desc')
+    .limit(25)
     .get()
     .then(snapshot => {
+      const newGames = snapshot.docs
+        .map(d => d.data())
+        .map((game: FirestoreGame) => {
+          if (_.isEmpty(game.player)) {
+            return game;
+          }
+          return firestoreToGame(game);
+        });
+
+      if (_.isEmpty(newGames[0].player)) {
+        dispatch({
+          type: FIREBASE.NEW_GAME_TRUE
+        });
+      }
       dispatch({
         type: FIREBASE.UPDATE_GAMES,
-        payload: snapshot.docs.map(d => d.data())
+        payload: newGames
       });
     });
 };
 
-export const setGame = (userId: string, game: GameState, gameId?: string) => (
+export const setGame = (userId: string, game: FirestoreGame) => (
   dispatch: Dispatch
 ) => {
-  const games = users.doc(userId).collection('games');
+  users
+    .doc(userId)
+    .collection('games')
+    .doc(game.id)
+    .set(game);
+};
 
-  if (gameId) {
-    games.doc(gameId).set(game);
-  } else {
-    // const ref = games.doc();
-  }
+export const newGame = (userId: string) => (dispatch: Dispatch) => {
+  dispatch({
+    type: FIREBASE.NEW_GAME_TRUE
+  });
+
+  const gamesRef = users.doc(userId).collection('games');
+  const ref = gamesRef.doc();
+
+  const game = {
+    ...gameInit,
+    id: ref.id,
+    createdAt: firestore.Timestamp.fromDate(new Date()),
+    updatedAt: null
+  };
+  gamesRef
+    .doc(ref.id)
+    .set(game)
+    .then(() => {
+      dispatch({
+        type: GAME.UPDATE,
+        payload: game
+      });
+    });
 };
