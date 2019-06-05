@@ -11,7 +11,7 @@ import {
 } from 'react-vis';
 
 import * as boardActions from '../../modules/game/actions';
-import { GameState } from '../../modules/game/types';
+import { GameState, IHistogram } from '../../modules/game/types';
 import { AppState } from '../../store/reducers';
 
 interface DispatchProps {
@@ -57,8 +57,8 @@ class PokerHistogram extends React.Component<Props> {
             },
             xOffset: 5
           }))}
-          labelAnchorX="text-after-edge"
-          labelAnchorY="middle"
+          labelAnchorX='text-after-edge'
+          labelAnchorY='middle'
           animation={true}
         />
       </FlexibleXYPlot>
@@ -68,20 +68,30 @@ class PokerHistogram extends React.Component<Props> {
     const { game, updateHistogram } = this.props;
     const { player, others, board, histogram } = game;
 
-    if (
-      (!_.isEmpty(histogram) &&
-        _.isEqual(histogram, oldProps.game.histogram)) ||
-      _.isEmpty(player)
-    ) {
-      return;
-    }
-    if (!_.isEqual(game.player, oldProps.game.player)) {
+    if (this.isHistogramEmpty(histogram) && !_.isEmpty(player)) {
+      updateHistogram({
+        hand: player,
+        others,
+        board
+      });
+    } else if (!_.isEqual(player, oldProps.game.player)) {
       updateHistogram({
         hand: player,
         others,
         board
       });
     }
+  }
+
+  private isHistogramEmpty(histogram: IHistogram[]) {
+    let isEmpty = true;
+    histogram.forEach(hist => {
+      if (hist.x !== 0) {
+        isEmpty = false;
+      }
+    });
+
+    return isEmpty;
   }
 }
 

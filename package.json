@@ -82,7 +82,7 @@
     "build": "node scripts/build.js",
     "test": "jest",
     "watch": "node scripts/start.js",
-    "start-rf": "cd ../royal-flush && npm start",
+    "start-rf": "cd ../royal-flush-backend && npm start",
     "start": "concurrently -k -p \"[{name}]\" -n \"TypeScript,Serverless\" -c \"cyan.bold,yellow.bold\" \"npm run watch\" \"npm run start-rf\""
   },
   "devDependencies": {
