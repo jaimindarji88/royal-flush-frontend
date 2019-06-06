@@ -37,9 +37,7 @@ class Players extends React.Component<Props, State> {
 
   public render() {
     return (
-      <div className="players">
-        <b>Players</b>
-        <br />
+      <div className='players'>
         {_.range(2, NUM_PLAYERS + 1).map(val => (
           <Button
             key={uuid.v4()}

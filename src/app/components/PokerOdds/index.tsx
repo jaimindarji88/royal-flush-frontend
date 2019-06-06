@@ -55,7 +55,6 @@ class PokerOdds extends React.Component<Props> {
 
     return (
       <div style={{ display: 'flex', flexWrap: 'nowrap', marginLeft: '5px' }}>
-        <h6 className='title is-6'>Game Odds</h6>
         {!_.isEmpty(playerOdds) && (
           <OddsComponent odds={playerOdds} player='Player' />
         )}

@@ -44,7 +44,13 @@ class History extends React.Component<Props, {}> {
   }
 
   public render() {
-    const { games } = this.props.firebase;
+    const { games, user } = this.props.firebase;
+
+    if (user === undefined) {
+      return (
+        <div className='history'>Please login to save history of hands.</div>
+      );
+    }
 
     return (
       <div className='history' style={{ overflow: 'auto', height: '350px' }}>
